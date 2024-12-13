@@ -8,6 +8,7 @@ import {
   Smileys,
   Mirror,
 } from "iconsax-react";
+import { FaExpand } from "react-icons/fa6";
 import { useGlobalData } from "../stores/global";
 
 type NavigationItem = {
@@ -99,13 +100,10 @@ const Navigation = () => {
 
   const currentIndex = useGlobalData((state) => state.currentIndex);
   const gotoIndex = useGlobalData((state) => state.gotoIndex);
-  const expanded = useGlobalData((state) => state.expanded);
 
   return (
     <div
-      className={`${
-        !expanded ? "w-[200px]" : "w-[100px]"
-      } h-[100vh] px-2 flex flex-col items-center gap-10 justify-center duration-300 ease-out transition-all border-r-[1px] shadow-custom border-sh-1`}
+      className={`w-[250px] h-[100vh] relative px-3 flex flex-col items-center gap-10 justify-center duration-300 ease-out transition-all border-r-[1px] shadow-custom border-sh-1`}
     >
       <div className="w-full h-fit flex flex-col gap-4">
         {navigationItems.map((item, i) => {
@@ -124,7 +122,7 @@ const Navigation = () => {
                 className={`text-sm`}
                 style={{
                   color: selected ? item.text : "#FFFFFF",
-                  fontWeight: selected ? "500" : "400",
+                  fontWeight: selected ? "600" : "300",
                   opacity: selected ? 1 : 0.6,
                 }}
               >
