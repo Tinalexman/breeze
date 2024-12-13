@@ -71,16 +71,16 @@ const Navigation = () => {
   return (
     <div
       className={`${
-        expanded ? "w-[300px]" : "w-[100px]"
-      } h-full flex flex-col items-start justify-center duration-300 ease-out transition-all`}
+        !expanded ? "w-[200px]" : "w-[100px]"
+      } h-[100vh] flex flex-col items-center gap-10 justify-center duration-300 ease-out transition-all border-r-[1px] shadow-custom border-sh-1`}
     >
-      <div className="w-full h-full flex flex-col gap-5">
+      <div className="w-full h-fit flex flex-col gap-4">
         {navigationItems.map((item, i) => {
           return (
             <div
               key={i}
               onClick={() => gotoIndex(i)}
-              className="w-fit flex flex-row items-center gap-1 cursor-pointer"
+              className="w-full flex flex-row items-center gap-4 cursor-pointer px-4 py-2"
             >
               <div>{currentIndex === i ? item.active : item.inactive}</div>
               <p className="text-white font-thin">{item.name}</p>
@@ -88,7 +88,6 @@ const Navigation = () => {
           );
         })}
       </div>
-      <button className="bg-sh-1">Hello</button>
     </div>
   );
 };
