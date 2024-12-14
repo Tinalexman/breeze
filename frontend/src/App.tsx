@@ -24,9 +24,11 @@ function App() {
   const currentIndex = useGlobalData((state) => state.currentIndex);
 
   return (
-    <div className="w-full h-100vh flex">
+    <div className="w-full h-[100vh] flex">
       <Navigation />
-      {children[currentIndex]}
+      <div className="px-10 py-5 w-full h-[100vh] overflow-x-hidden overflow-y-scroll">
+        {children[currentIndex]}
+      </div>
     </div>
   );
 }

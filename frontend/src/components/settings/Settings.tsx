@@ -2,8 +2,8 @@ import React from "react";
 
 const Settings = () => {
   return (
-    <div className="w-full h-[100vh] overflow-y-auto overflow-x-hidden">
-      Settings
+    <div className="w-full flex flex-col">
+      <h1 className="text-4xl text-white font-bold">Settings</h1>
     </div>
   );
 };

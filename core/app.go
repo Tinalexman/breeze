@@ -22,9 +22,7 @@ func (a *App) DomReady(ctx context.Context) {
 }
 
 func (a *App) BeforeClose(ctx context.Context) bool {
-
 	return false
-
 }
 
 func (a *App) Greet(name string) string {

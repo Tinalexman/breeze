@@ -2,8 +2,8 @@ import React from "react";
 
 const Global = () => {
   return (
-    <div className="w-full h-[100vh] overflow-y-auto overflow-x-hidden">
-      Global
+    <div className="w-full flex flex-col">
+      <h1 className="text-4xl text-white font-bold">Global</h1>
     </div>
   );
 };
