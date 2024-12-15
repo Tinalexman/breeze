@@ -24,5 +24,27 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".scrollbar-thin": {
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgb(135 135 135) rgb(247 247 247)",
+        },
+        ".scrollbar-webkit": {
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "rgb(247 247 247)",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "rgb(135 135 135)",
+            borderRadius: "4px",
+          },
+        },
+      };
+      addUtilities(newUtilities, ["responsive", "hover", "focus"]);
+    },
+  ],
 };

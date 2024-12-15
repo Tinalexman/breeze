@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import Modal from "../reusable/Modal";
 import { SearchNormal } from "iconsax-react";
+import NewModel from "./NewModel";
 // import nf from "../../assets/images/not_found.svg";
 
 const Models = () => {
@@ -15,7 +16,7 @@ const Models = () => {
           Define and manage all your models all in one place
         </p>
         <div className="mt-5 flex w-full justify-between">
-          <div className="w-[200px] relative">
+          <div className="w-[250px] relative">
             <input
               type="text"
               placeholder="Search model"
@@ -37,7 +38,15 @@ const Models = () => {
           </button>
         </div>
       </div>
-      <Modal visible={addModel} onClose={() => showAddModel(false)}></Modal>
+      <Modal
+        visible={addModel}
+        onClose={() => showAddModel(false)}
+        width="400px"
+        height="300px"
+        closeOnClickOutside={false}
+      >
+        <NewModel onClose={() => showAddModel(false)} />
+      </Modal>
     </>
   );
 };

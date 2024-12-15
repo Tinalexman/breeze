@@ -8,8 +8,9 @@ const Modal: FC<{
   onClose: () => void;
   width?: string;
   height?: string;
+  closeOnClickOutside?: boolean;
   children?: ReactNode;
-}> = ({ visible, onClose, width, height, children }) => {
+}> = ({ visible, onClose, width, height, closeOnClickOutside, children }) => {
   return ReactDOM.createPortal(
     <AnimatePresence initial={true}>
       {visible && (
@@ -27,7 +28,11 @@ const Modal: FC<{
           exit={{
             opacity: 0,
           }}
-          onClick={onClose}
+          onClick={() => {
+            if (closeOnClickOutside !== undefined && !closeOnClickOutside)
+              return;
+            onClose();
+          }}
           className={`w-full h-[100vh] bg-overlay fixed top-0 left-0 grid place-content-center`}
           style={{
             backdropFilter: "blur(5px)",
