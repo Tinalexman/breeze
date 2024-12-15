@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchNormal } from "iconsax-react";
 import { IoIosAdd } from "react-icons/io";
 import Modal from "../reusable/Modal";
 import NewController from "./NewController";
+import { GetAllControllers } from "../../../wailsjs/go/core/App";
 
 const Controllers = () => {
   const [addController, showAddController] = useState<boolean>(false);
+
+  useEffect(() => {
+    let fn = async () => {
+      let c = await GetAllControllers();
+    };
+    fn();
+  }, []);
+
   return (
     <>
       <div className="w-full flex flex-col">

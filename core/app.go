@@ -2,7 +2,12 @@ package core
 
 import (
 	"context"
-	"fmt"
+
+	"breeze/core/controller"
+	"breeze/core/files"
+	"breeze/core/global"
+	"breeze/core/model"
+	"breeze/core/project"
 )
 
 type App struct {
@@ -25,6 +30,29 @@ func (a *App) BeforeClose(ctx context.Context) bool {
 	return false
 }
 
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) GetAllModels() []model.Model {
+	return model.GetAllModels()
+}
+
+func (a *App) GetAllControllers() []controller.Controller {
+	return controller.GetAllControllers()
+}
+
+func (a *App) CreateProject(name string) error {
+	currentProject := project.Project{}
+	err := currentProject.CreateNewProject(name)
+	if err == nil {
+		global.Global.CurrentProject = currentProject
+	}
+
+	return err
+}
+
+func (a *App) LoadProject(name string) error {
+	err := project.LoadProject(name)
+	if err == nil {
+		global.Global.CurrentProject = project.Project{Name: name, Directory: files.GetFullPath(name)}
+	}
+
+	return err
 }
