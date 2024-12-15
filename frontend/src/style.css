@@ -89,6 +89,8 @@ input {
   background-color: #181818;
   border-radius: 6px;
   color: white;
-  padding: 0.5rem 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 400;
   outline: none;
 }

@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         background: "#131313",
+        overlay: "rgba(0, 0, 0, 0.2)",
         "sh-1": "#303236",
         "sh-2": "#4B555C",
         "sh-3": "#657C82",

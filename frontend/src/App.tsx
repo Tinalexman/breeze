@@ -10,9 +10,6 @@ import Events from "./components/events/Events";
 import Settings from "./components/settings/Settings";
 import { useGlobalData } from "./stores/global";
 
-import { MantineProvider } from "@mantine/core";
-import "@mantine/core/styles.css";
-
 function App() {
   const children: React.ReactNode[] = [
     <Overview key={"overview"} />,
@@ -28,14 +25,12 @@ function App() {
   const currentIndex = useGlobalData((state) => state.currentIndex);
 
   return (
-    <MantineProvider>
-      <div className="w-full h-[100vh] flex">
-        <Navigation />
-        <div className="px-10 py-5 w-full h-[100vh] overflow-x-hidden overflow-y-scroll">
-          {children[currentIndex]}
-        </div>
+    <div className="w-full h-full flex">
+      <Navigation />
+      <div className="px-10 py-5 w-full h-full overflow-x-hidden overflow-y-auto">
+        {children[currentIndex]}
       </div>
-    </MantineProvider>
+    </div>
   );
 }
 
