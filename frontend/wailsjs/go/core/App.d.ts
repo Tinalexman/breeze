@@ -13,15 +13,19 @@ export function DeleteControllerByID(arg1:string):Promise<void>;
 
 export function DeleteModelByID(arg1:string):Promise<void>;
 
-export function GetAllControllers():Promise<Array<controller.Controller>>;
+export function GetAllControllers(arg1:string):Promise<Array<controller.Controller>>;
 
-export function GetAllModels():Promise<Array<model.Model>>;
+export function GetAllModels(arg1:string):Promise<Array<model.Model>>;
 
 export function GetControllerByID(arg1:string):Promise<controller.Controller>;
 
 export function GetModelByID(arg1:string):Promise<model.Model>;
 
 export function LoadProject(arg1:string):Promise<void>;
+
+export function LoadRecentProject():Promise<void>;
+
+export function SaveCurrentProject():Promise<void>;
 
 export function SaveProject(arg1:string):Promise<void>;
 

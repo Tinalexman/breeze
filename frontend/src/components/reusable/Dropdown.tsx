@@ -67,7 +67,7 @@ const Dropdown: FC<{
         </div>
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
-      {open && (
+      {open && menus.length > 0 && (
         <div
           className={`flex justify-start items-center bg-monokai absolute right-0 z-50 p-2 w-full left-0 rounded-lg top-8 shadow-custom`}
         >

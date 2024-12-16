@@ -16,12 +16,12 @@ export const useGetAllControllers = () => {
 
   const reload = useGlobalData((state) => state.reload);
 
-  const getControllers = async () => {
+  const getControllers = async (search?: string) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      let c = await GetAllControllers();
+      let c = await GetAllControllers(search ?? "");
       setData(c);
       setSuccess(true);
     } catch (error) {

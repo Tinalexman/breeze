@@ -50,7 +50,9 @@ const NewController: FC<{ onClose: () => void }> = ({ onClose }) => {
 
           return errors;
         }}
-        onSubmit={(values) => {}}
+        onSubmit={(values) => {
+          createController(values);
+        }}
       >
         {({
           values,

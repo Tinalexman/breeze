@@ -1,6 +1,7 @@
 package files
 
 import (
+	"errors"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -21,7 +22,21 @@ func WriteContentToFile(path string, content []byte) error {
 	return err
 }
 
+func DoesFileExist(path string) bool {
+	_, err := os.Stat(path)
+	return errors.Is(err, fs.ErrExist)
+}
+
+func DoesFileNotExist(path string) bool {
+	_, err := os.Stat(path)
+	return errors.Is(err, fs.ErrNotExist)
+}
+
 func ReadContentFromFile(path string) ([]byte, error) {
+	notExist := DoesFileNotExist(path)
+	if notExist {
+		return []byte{}, fs.ErrNotExist
+	}
 	return os.ReadFile(path)
 }
 

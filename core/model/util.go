@@ -3,11 +3,26 @@ package model
 import (
 	"breeze/core/util"
 	"fmt"
+	"strings"
 )
 
 type CreateModelPayload struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
+}
+
+func GetAllModels(search string) []Model {
+	if search == "" {
+		return AllModels
+	}
+
+	searchedModels := make([]Model, 0)
+	for _, m := range AllModels {
+		if strings.Contains(util.PrepareFieldForSearch(m.Name), util.PrepareFieldForSearch(search)) {
+			searchedModels = append(searchedModels, m)
+		}
+	}
+	return searchedModels
 }
 
 func GetModelByID(id string) (Model, error) {

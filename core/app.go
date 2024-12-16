@@ -2,16 +2,21 @@ package core
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	"breeze/core/controller"
 	"breeze/core/files"
-	"breeze/core/global"
 	"breeze/core/model"
 	"breeze/core/project"
+	"breeze/core/util"
 )
 
+var log = util.Logger()
+
 type App struct {
-	ctx context.Context
+	ctx            context.Context
+	RecentProjects []project.Project `json:"recentProjects"`
 }
 
 func NewApp() *App {
@@ -20,8 +25,7 @@ func NewApp() *App {
 
 func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
-	// a.CreateProject("test")
-	a.LoadProject("test")
+	a.LoadRecentProject()
 }
 
 func (a *App) DomReady(ctx context.Context) {
@@ -32,33 +36,64 @@ func (a *App) BeforeClose(ctx context.Context) bool {
 	return false
 }
 
+func (a *App) LoadRecentProject() {
+	breezePath := files.GetFullPath("settings.json")
+
+	var newApp App
+	newApp.RecentProjects = []project.Project{}
+
+	exists := files.DoesFileExist(breezePath)
+	if !exists {
+		jsonData, _ := json.MarshalIndent(newApp, "", "  ")
+		files.WriteContentToFile(breezePath, jsonData)
+	}
+
+	data, err := files.ReadContentFromFile(breezePath)
+
+	if err != nil {
+		json.Unmarshal(data, &newApp)
+		a.RecentProjects = newApp.RecentProjects
+		if len(newApp.RecentProjects) > 0 {
+			a.LoadProject(newApp.RecentProjects[0].Name)
+		}
+	}
+}
+
 // PROJECT
 func (a *App) CreateProject(name string) error {
-	currentProject := project.Project{}
-	err := currentProject.CreateNewProject(name)
+	for _, p := range a.RecentProjects {
+		if p.Name == name {
+			return fmt.Errorf("The project '%s' already exists", name)
+		}
+	}
+
+	newProject := project.Project{}
+	err := newProject.CreateNewProject(name)
 	if err == nil {
-		global.Global.CurrentProject = currentProject
+		a.RecentProjects = append(a.RecentProjects, newProject)
 	}
 
 	return err
 }
 
 func (a *App) LoadProject(name string) error {
-	err := project.LoadProject(name)
-	if err == nil {
-		global.Global.CurrentProject = project.Project{Name: name, Directory: files.GetFullPath(name)}
-	}
-
-	return err
+	return project.LoadProject(name)
 }
 
 func (a *App) SaveProject(name string) error {
 	return project.SaveProject(name)
 }
 
+func (a *App) SaveCurrentProject() {
+	if len(a.RecentProjects) > 0 {
+		projectName := a.RecentProjects[0].Name
+		go a.SaveProject(projectName)
+	}
+}
+
 // CONTROLLERS
-func (a *App) GetAllControllers() []controller.Controller {
-	return controller.AllControllers
+func (a *App) GetAllControllers(search string) []controller.Controller {
+	return controller.GetAllControllers(search)
 }
 
 func (a *App) GetControllerByID(id string) (controller.Controller, error) {
@@ -72,7 +107,7 @@ func (a *App) GetControllerByID(id string) (controller.Controller, error) {
 func (a *App) CreateController(payload controller.CreateControllerPayload) error {
 	err := controller.CreateNewController(payload)
 	if err == nil {
-		a.SaveProject("test")
+		a.SaveCurrentProject()
 	}
 	return err
 }
@@ -80,14 +115,14 @@ func (a *App) CreateController(payload controller.CreateControllerPayload) error
 func (a *App) DeleteControllerByID(id string) error {
 	err := controller.DeleteControllerByID(id)
 	if err == nil {
-		a.SaveProject("test")
+		a.SaveCurrentProject()
 	}
 	return err
 }
 
 // MODEL
-func (a *App) GetAllModels() []model.Model {
-	return model.AllModels
+func (a *App) GetAllModels(search string) []model.Model {
+	return model.GetAllModels(search)
 }
 
 func (a *App) GetModelByID(id string) (model.Model, error) {
@@ -101,7 +136,7 @@ func (a *App) GetModelByID(id string) (model.Model, error) {
 func (a *App) CreateModel(payload model.CreateModelPayload) error {
 	err := model.CreateNewModel(payload)
 	if err == nil {
-		a.SaveProject("test")
+		a.SaveCurrentProject()
 	}
 
 	return err
@@ -110,7 +145,7 @@ func (a *App) CreateModel(payload model.CreateModelPayload) error {
 func (a *App) UpdateModelMetaData(id string, data map[string]model.ModelData) error {
 	err := model.UpdateModelMetaData(id, data)
 	if err == nil {
-		a.SaveProject("test")
+		a.SaveCurrentProject()
 	}
 	return err
 }
@@ -118,7 +153,7 @@ func (a *App) UpdateModelMetaData(id string, data map[string]model.ModelData) er
 func (a *App) DeleteModelByID(id string) error {
 	err := model.DeleteModelByID(id)
 	if err == nil {
-		a.SaveProject("test")
+		a.SaveCurrentProject()
 	}
 	return err
 }

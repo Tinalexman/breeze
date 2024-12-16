@@ -16,12 +16,12 @@ export const useGetAllModels = () => {
 
   const reload = useGlobalData((state) => state.reload);
 
-  const getModels = async () => {
+  const getModels = async (search?: string) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      let c = await GetAllModels();
+      let c = await GetAllModels(search ?? "");
       setData(c);
       setSuccess(true);
     } catch (error) {

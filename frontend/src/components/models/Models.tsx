@@ -5,6 +5,7 @@ import { SearchNormal } from "iconsax-react";
 import NewModel from "./NewModel";
 import { useGetAllModels } from "../../hooks/modelHooks";
 import ModelContainer from "./ModelContainer";
+import Loader from "../reusable/Loader";
 // import nf from "../../assets/images/not_found.svg";
 
 const Models = () => {
@@ -24,6 +25,10 @@ const Models = () => {
               type="text"
               placeholder="Search model"
               className="placeholder:text-sh-2 pl-8 pr-4 w-full"
+              onChange={(e) => {
+                const res = e.target.value.trim();
+                getModels(res);
+              }}
             />
             <SearchNormal
               className="text-sh-2 absolute top-1/2 left-2 -translate-y-1/2"
@@ -41,9 +46,10 @@ const Models = () => {
           </button>
         </div>
         <div className="w-full grid grid-cols-4">
-          {data.map((model, i) => {
-            return <ModelContainer key={i} model={model} />;
-          })}
+          {!loading &&
+            data.map((model, i) => {
+              return <ModelContainer key={i} model={model} />;
+            })}
         </div>
       </div>
       <Modal

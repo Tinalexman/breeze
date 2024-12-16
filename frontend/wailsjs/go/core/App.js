@@ -22,12 +22,12 @@ export function DeleteModelByID(arg1) {
   return window['go']['core']['App']['DeleteModelByID'](arg1);
 }
 
-export function GetAllControllers() {
-  return window['go']['core']['App']['GetAllControllers']();
+export function GetAllControllers(arg1) {
+  return window['go']['core']['App']['GetAllControllers'](arg1);
 }
 
-export function GetAllModels() {
-  return window['go']['core']['App']['GetAllModels']();
+export function GetAllModels(arg1) {
+  return window['go']['core']['App']['GetAllModels'](arg1);
 }
 
 export function GetControllerByID(arg1) {
@@ -40,6 +40,14 @@ export function GetModelByID(arg1) {
 
 export function LoadProject(arg1) {
   return window['go']['core']['App']['LoadProject'](arg1);
+}
+
+export function LoadRecentProject() {
+  return window['go']['core']['App']['LoadRecentProject']();
+}
+
+export function SaveCurrentProject() {
+  return window['go']['core']['App']['SaveCurrentProject']();
 }
 
 export function SaveProject(arg1) {

@@ -3,12 +3,27 @@ package controller
 import (
 	"breeze/core/util"
 	"fmt"
+	"strings"
 )
 
 type CreateControllerPayload struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	ModelID     string `json:"modelID"`
+}
+
+func GetAllControllers(search string) []Controller {
+	if search == "" {
+		return AllControllers
+	}
+
+	searchedControllers := make([]Controller, 0)
+	for _, m := range AllControllers {
+		if strings.Contains(util.PrepareFieldForSearch(m.Name), util.PrepareFieldForSearch(search)) {
+			searchedControllers = append(searchedControllers, m)
+		}
+	}
+	return searchedControllers
 }
 
 func GetControllerByID(id string) (Controller, error) {
