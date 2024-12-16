@@ -4,6 +4,7 @@ import (
 	"breeze/core/controller"
 	"breeze/core/files"
 	"breeze/core/model"
+	"breeze/core/route"
 	"encoding/json"
 )
 
@@ -18,6 +19,10 @@ type modelData struct {
 
 type controllerData struct {
 	Controllers []controller.Controller `json:"controllers"`
+}
+
+type routeData struct {
+	Routes []route.Route `json:"routes"`
 }
 
 func (p *Project) CreateNewProject(name string) error {
@@ -121,6 +126,20 @@ func LoadProject(projectName string) error {
 	}
 	controller.AllControllers = c.Controllers
 
+	// LOAD CONTROLLERS
+	routeByteData, err := loadSingleFile(projectName, "routes")
+	if err != nil {
+		return err
+	}
+
+	var r routeData
+
+	err = json.Unmarshal(routeByteData, &r)
+	if err != nil {
+		return err
+	}
+	route.AllRoutes = r.Routes
+
 	return nil
 }
 
@@ -150,6 +169,20 @@ func SaveProject(projectName string) error {
 	}
 
 	err = writeSingleFile(projectName, "models", modelByteData)
+	if err != nil {
+		return err
+	}
+
+	// SAVE ROUTES
+	var routeData routeData
+	routeData.Routes = route.AllRoutes
+
+	routeByteData, err := json.MarshalIndent(routeData, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	err = writeSingleFile(projectName, "routes", routeByteData)
 	if err != nil {
 		return err
 	}
