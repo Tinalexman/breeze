@@ -42,6 +42,10 @@ func (a *App) BeforeClose(ctx context.Context) (ok bool) {
 	return
 }
 
+func (a *App) GetRecentProjects() ([]string, error) {
+	return files.GetAvailableDirectories()
+}
+
 func (a *App) Load() error {
 	breezePath := files.GetFullPath("settings.json")
 
@@ -64,16 +68,12 @@ func (a *App) Load() error {
 	return err
 }
 
-func (a *App) GetRecentProjects() ([]string, error) {
-	return files.GetAvailableDirectories()
-}
-
 func (a *App) Save() error {
-	breezePath := files.GetFullPath("settings.json")
-
 	if a.RecentProjects == nil {
-		a.RecentProjects = []project.Project{}
+		return nil
 	}
+
+	breezePath := files.GetFullPath("settings.json")
 
 	appByteData, err := json.MarshalIndent(a, "", "  ")
 	if err != nil {
@@ -100,12 +100,32 @@ func (a *App) CreateProject(payload project.CreateNewProjectPayload) error {
 	return err
 }
 
+func (a *App) updateRecentProjects(p project.Project, name string) {
+	ok := true
+	for _, pr := range a.RecentProjects {
+		if pr.Name == name {
+			ok = false
+		}
+	}
+
+	if ok {
+		a.RecentProjects = append(a.RecentProjects, p)
+	}
+}
+
 func (a *App) LoadProject(name string) error {
-	return project.LoadProject(name)
+	p := project.Project{Name: name}
+
+	err := p.LoadProject()
+	a.updateRecentProjects(p, name)
+
+	return err
 }
 
 func (a *App) SaveProject(name string) error {
-	return project.SaveProject(name)
+	p := project.Project{Name: name}
+	a.updateRecentProjects(p, name)
+	return p.SaveProject()
 }
 
 func (a *App) SaveCurrentProject() {

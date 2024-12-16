@@ -96,9 +96,9 @@ func createProjectData(directory string, data *Project) error {
 	return err
 }
 
-func LoadProject(projectName string) error {
+func (p *Project) LoadProject() error {
 	// LOAD MODELS
-	modelByteData, err := loadSingleFile(projectName, "models")
+	modelByteData, err := loadSingleFile(p.Name, "models")
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func LoadProject(projectName string) error {
 	model.AllModels = m.Models
 
 	// LOAD CONTROLLERS
-	controllerByteData, err := loadSingleFile(projectName, "controllers")
+	controllerByteData, err := loadSingleFile(p.Name, "controllers")
 	if err != nil {
 		return err
 	}
@@ -126,7 +126,7 @@ func LoadProject(projectName string) error {
 	controller.AllControllers = c.Controllers
 
 	// LOAD CONTROLLERS
-	routeByteData, err := loadSingleFile(projectName, "routes")
+	routeByteData, err := loadSingleFile(p.Name, "routes")
 	if err != nil {
 		return err
 	}
@@ -142,7 +142,7 @@ func LoadProject(projectName string) error {
 	return nil
 }
 
-func SaveProject(projectName string) error {
+func (p *Project) SaveProject() error {
 	// SAVE CONTROLLERS
 	var controllerData controllerData
 	controllerData.Controllers = controller.AllControllers
@@ -152,7 +152,7 @@ func SaveProject(projectName string) error {
 		return err
 	}
 
-	err = writeSingleFile(projectName, "controllers", controllerByteData)
+	err = writeSingleFile(p.Name, "controllers", controllerByteData)
 	if err != nil {
 		return err
 	}
@@ -166,7 +166,7 @@ func SaveProject(projectName string) error {
 		return err
 	}
 
-	err = writeSingleFile(projectName, "models", modelByteData)
+	err = writeSingleFile(p.Name, "models", modelByteData)
 	if err != nil {
 		return err
 	}
@@ -180,7 +180,7 @@ func SaveProject(projectName string) error {
 		return err
 	}
 
-	err = writeSingleFile(projectName, "routes", routeByteData)
+	err = writeSingleFile(p.Name, "routes", routeByteData)
 	if err != nil {
 		return err
 	}
