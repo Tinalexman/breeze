@@ -9,10 +9,11 @@ import (
 	"breeze/core/files"
 	"breeze/core/model"
 	"breeze/core/project"
-	"breeze/core/util"
+	"breeze/core/route"
+	// "breeze/core/util"
 )
 
-var log = util.Logger()
+// var log = util.Logger()
 
 type App struct {
 	ctx            context.Context
@@ -20,32 +21,37 @@ type App struct {
 }
 
 func NewApp() *App {
-	return &App{}
+	return &App{
+		RecentProjects: []project.Project{},
+	}
 }
 
 func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
-	a.LoadRecentProject()
+	a.Load()
 }
 
 func (a *App) DomReady(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) BeforeClose(ctx context.Context) bool {
-	return false
+func (a *App) BeforeClose(ctx context.Context) (ok bool) {
+	ok = false
+
+	_ = a.Save()
+	return
 }
 
-func (a *App) LoadRecentProject() {
+func (a *App) Load() error {
 	breezePath := files.GetFullPath("settings.json")
 
 	var newApp App
 	newApp.RecentProjects = []project.Project{}
 
-	exists := files.DoesFileExist(breezePath)
-	if !exists {
+	if files.DoesFileNotExist(breezePath) {
 		jsonData, _ := json.MarshalIndent(newApp, "", "  ")
 		files.WriteContentToFile(breezePath, jsonData)
+		return nil
 	}
 
 	data, err := files.ReadContentFromFile(breezePath)
@@ -53,22 +59,40 @@ func (a *App) LoadRecentProject() {
 	if err != nil {
 		json.Unmarshal(data, &newApp)
 		a.RecentProjects = newApp.RecentProjects
-		if len(newApp.RecentProjects) > 0 {
-			a.LoadProject(newApp.RecentProjects[0].Name)
-		}
 	}
+
+	return err
+}
+
+func (a *App) GetRecentProjects() ([]string, error) {
+	return files.GetAvailableDirectories()
+}
+
+func (a *App) Save() error {
+	breezePath := files.GetFullPath("settings.json")
+
+	if a.RecentProjects == nil {
+		a.RecentProjects = []project.Project{}
+	}
+
+	appByteData, err := json.MarshalIndent(a, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return files.WriteContentToFile(breezePath, appByteData)
 }
 
 // PROJECT
-func (a *App) CreateProject(name string) error {
+func (a *App) CreateProject(payload project.CreateNewProjectPayload) error {
 	for _, p := range a.RecentProjects {
-		if p.Name == name {
-			return fmt.Errorf("The project '%s' already exists", name)
+		if p.Name == payload.Name {
+			return fmt.Errorf("'%s' already exists", payload.Name)
 		}
 	}
 
 	newProject := project.Project{}
-	err := newProject.CreateNewProject(name)
+	err := newProject.CreateNewProject(payload)
 	if err == nil {
 		a.RecentProjects = append(a.RecentProjects, newProject)
 	}
@@ -89,6 +113,35 @@ func (a *App) SaveCurrentProject() {
 		projectName := a.RecentProjects[0].Name
 		go a.SaveProject(projectName)
 	}
+}
+
+// ROUTES
+func (a *App) GetAllRoutes(search string) []route.Route {
+	return route.GetAllRoutes(search)
+}
+
+func (a *App) GetRouteByID(id string) (route.Route, error) {
+	r, err := route.GetRouteByID(id)
+	if err != nil {
+		return route.Route{}, err
+	}
+	return r, nil
+}
+
+func (a *App) CreateRoute(payload route.CreateRoutePayload) error {
+	err := route.CreateNewRoute(payload)
+	if err == nil {
+		a.SaveCurrentProject()
+	}
+	return err
+}
+
+func (a *App) DeleteRouteByID(id string) error {
+	err := route.DeleteRouteByID(id)
+	if err == nil {
+		a.SaveCurrentProject()
+	}
+	return err
 }
 
 // CONTROLLERS

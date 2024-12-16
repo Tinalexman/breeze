@@ -50,6 +50,7 @@ export const useGetControllerByID = () => {
     id: "",
     modelID: "",
     name: "",
+    handlers: [],
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);

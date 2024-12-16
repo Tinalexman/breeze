@@ -46,7 +46,7 @@ const Drawer: FC<{
             position === "left" ? "justify-start" : "justify-end"
           }`}
           style={{
-            backdropFilter: "blur(5px)",
+            backdropFilter: "blur(2px)",
           }}
         >
           <motion.div

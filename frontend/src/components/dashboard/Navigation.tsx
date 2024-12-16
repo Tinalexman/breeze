@@ -8,8 +8,7 @@ import {
   Smileys,
   Mirror,
 } from "iconsax-react";
-import { FaExpand } from "react-icons/fa6";
-import { useGlobalData } from "../stores/global";
+import { useGlobalData } from "../../stores/global";
 
 type NavigationItem = {
   name: string;

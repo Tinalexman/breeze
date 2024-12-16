@@ -51,3 +51,23 @@ func GetHomeDirectory() string {
 func GetFullPath(paths ...string) string {
 	return filepath.Join(GetHomeDirectory(), filepath.Join(paths...))
 }
+
+func GetAvailableDirectories() ([]string, error) {
+	breezePath := GetHomeDirectory()
+
+	projects := make([]string, 0)
+
+	filepath.WalkDir(breezePath, func(path string, info os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if info.IsDir() && path != breezePath {
+			projects = append(projects, info.Name())
+		}
+
+		return nil
+	})
+
+	return projects, nil
+}

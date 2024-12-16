@@ -35,7 +35,7 @@ const Modal: FC<{
           }}
           className={`w-full h-[100vh] bg-overlay fixed top-0 left-0 grid place-content-center`}
           style={{
-            backdropFilter: "blur(5px)",
+            backdropFilter: "blur(2px)",
           }}
         >
           <motion.div

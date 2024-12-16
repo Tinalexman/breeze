@@ -9,12 +9,8 @@ const (
 )
 
 type RouteData struct {
-	Method          string `json:"method"`
-	Name            string
-	RequestHeaders  map[string]interface{}
-	RequestBody     interface{}
-	ResponseHeaders map[string]interface{}
-	ResponseBody    interface{}
+	Method string `json:"method"`
+	Path   string `json:"path"`
 }
 
 type Route struct {
