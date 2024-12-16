@@ -24,3 +24,5 @@ export function GetModelByID(arg1:string):Promise<model.Model>;
 export function LoadProject(arg1:string):Promise<void>;
 
 export function SaveProject(arg1:string):Promise<void>;
+
+export function UpdateModelMetaData(arg1:string,arg2:{[key: string]: model.ModelData}):Promise<void>;

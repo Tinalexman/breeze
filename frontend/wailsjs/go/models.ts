@@ -71,6 +71,7 @@ export namespace model {
 	    name: string;
 	    id: string;
 	    description: string;
+	    icon: string;
 	    metadata: {[key: string]: ModelData};
 	
 	    static createFrom(source: any = {}) {
@@ -82,6 +83,7 @@ export namespace model {
 	        this.name = source["name"];
 	        this.id = source["id"];
 	        this.description = source["description"];
+	        this.icon = source["icon"];
 	        this.metadata = this.convertValues(source["metadata"], ModelData, true);
 	    }
 	

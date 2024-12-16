@@ -20,6 +20,8 @@ func NewApp() *App {
 
 func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
+	// a.CreateProject("test")
+	a.LoadProject("test")
 }
 
 func (a *App) DomReady(ctx context.Context) {
@@ -59,22 +61,28 @@ func (a *App) GetAllControllers() []controller.Controller {
 	return controller.AllControllers
 }
 
-func (a *App) GetControllerByID(id string) controller.Controller {
-	c, ok := controller.GetControllerByID(id)
-	if ok {
-		return c
+func (a *App) GetControllerByID(id string) (controller.Controller, error) {
+	c, err := controller.GetControllerByID(id)
+	if err != nil {
+		return controller.Controller{}, err
 	}
-	return controller.Controller{
-		ID: global.INVALID_ID,
-	}
+	return c, nil
 }
 
-func (a *App) CreateController(payload controller.CreateControllerPayload) {
-	controller.CreateNewController(payload)
+func (a *App) CreateController(payload controller.CreateControllerPayload) error {
+	err := controller.CreateNewController(payload)
+	if err == nil {
+		a.SaveProject("test")
+	}
+	return err
 }
 
-func (a *App) DeleteControllerByID(id string) {
-	controller.DeleteControllerByID(id)
+func (a *App) DeleteControllerByID(id string) error {
+	err := controller.DeleteControllerByID(id)
+	if err == nil {
+		a.SaveProject("test")
+	}
+	return err
 }
 
 // MODEL
@@ -82,20 +90,35 @@ func (a *App) GetAllModels() []model.Model {
 	return model.AllModels
 }
 
-func (a *App) GetModelByID(id string) model.Model {
-	c, ok := model.GetModelByID(id)
-	if ok {
-		return c
+func (a *App) GetModelByID(id string) (model.Model, error) {
+	m, err := model.GetModelByID(id)
+	if err != nil {
+		return model.Model{}, err
 	}
-	return model.Model{
-		ID: global.INVALID_ID,
-	}
+	return m, nil
 }
 
-func (a *App) CreateModel(payload model.CreateModelPayload) {
-	model.CreateNewModel(payload)
+func (a *App) CreateModel(payload model.CreateModelPayload) error {
+	err := model.CreateNewModel(payload)
+	if err == nil {
+		a.SaveProject("test")
+	}
+
+	return err
 }
 
-func (a *App) DeleteModelByID(id string) {
-	model.DeleteModelByID(id)
+func (a *App) UpdateModelMetaData(id string, data map[string]model.ModelData) error {
+	err := model.UpdateModelMetaData(id, data)
+	if err == nil {
+		a.SaveProject("test")
+	}
+	return err
+}
+
+func (a *App) DeleteModelByID(id string) error {
+	err := model.DeleteModelByID(id)
+	if err == nil {
+		a.SaveProject("test")
+	}
+	return err
 }

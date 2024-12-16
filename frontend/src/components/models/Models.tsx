@@ -4,6 +4,7 @@ import Modal from "../reusable/Modal";
 import { SearchNormal } from "iconsax-react";
 import NewModel from "./NewModel";
 import { useGetAllModels } from "../../hooks/modelHooks";
+import ModelContainer from "./ModelContainer";
 // import nf from "../../assets/images/not_found.svg";
 
 const Models = () => {
@@ -39,12 +40,17 @@ const Models = () => {
             New Model
           </button>
         </div>
+        <div className="w-full grid grid-cols-4">
+          {data.map((model, i) => {
+            return <ModelContainer key={i} model={model} />;
+          })}
+        </div>
       </div>
       <Modal
         visible={addModel}
         onClose={() => showAddModel(false)}
         width="400px"
-        height="300px"
+        height="auto"
         closeOnClickOutside={false}
       >
         <NewModel onClose={() => showAddModel(false)} />

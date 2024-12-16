@@ -17,6 +17,7 @@ type Model struct {
 	Name        string               `json:"name"`
 	ID          string               `json:"id"`
 	Description string               `json:"description"`
+	Icon        string               `json:"icon"`
 	MetaData    map[string]ModelData `json:"metadata"`
 }
 

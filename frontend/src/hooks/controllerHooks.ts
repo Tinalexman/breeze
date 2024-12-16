@@ -7,11 +7,14 @@ import {
 } from "../../wailsjs/go/core/App";
 import { controller } from "../../wailsjs/go/models";
 import toast from "react-hot-toast";
+import { useGlobalData } from "../stores/global";
 
 export const useGetAllControllers = () => {
   const [data, setData] = useState<controller.Controller[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const reload = useGlobalData((state) => state.reload);
 
   const getControllers = async () => {
     if (loading) return;
@@ -23,7 +26,7 @@ export const useGetAllControllers = () => {
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while retrieving the controllers");
+      toast.error(`${error}`);
     }
 
     setLoading(false);
@@ -31,7 +34,7 @@ export const useGetAllControllers = () => {
 
   useEffect(() => {
     getControllers();
-  }, []);
+  }, [reload]);
 
   return {
     loading,
@@ -61,7 +64,7 @@ export const useGetControllerByID = () => {
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while retrieving the controller");
+      toast.error(`${error}`);
     }
 
     setLoading(false);
@@ -86,9 +89,10 @@ export const useDeleteControllerByID = () => {
     try {
       await DeleteControllerByID(id);
       setSuccess(true);
+      toast.success("The controller was deleted successfully");
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while deleting the controller");
+      toast.error(`${error}`);
     }
 
     setLoading(false);
@@ -117,7 +121,7 @@ export const useCreateController = () => {
       toast.success("A new controller was created successfully");
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while creating the controller");
+      toast.error(`${error}`);
     }
 
     setLoading(false);

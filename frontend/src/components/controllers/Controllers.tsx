@@ -41,6 +41,7 @@ const Controllers = () => {
         visible={addController}
         onClose={() => showAddController(false)}
         width="400px"
+        height="auto"
         closeOnClickOutside={false}
       >
         <NewController onClose={() => showAddController(false)} />

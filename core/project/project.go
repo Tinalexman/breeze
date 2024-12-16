@@ -64,7 +64,7 @@ func createSingleFileAndWriteDefault(directory, target string) error {
 	if err != nil {
 		return err
 	}
-	err = files.WriteContentToFile(directory, []byte("{\""+target+"\": []}"))
+	err = files.WriteContentToFile(directory, []byte("{\n  \""+target+"\": []\n}"))
 	return err
 }
 
@@ -82,7 +82,7 @@ func createProjectData(directory string, data *Project) error {
 		return err
 	}
 
-	jsonData, err := json.Marshal(data)
+	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -130,7 +130,7 @@ func SaveProject(projectName string) error {
 	var controllerData controllerData
 	controllerData.Controllers = controller.AllControllers
 
-	controllerByteData, err := json.Marshal(controllerData)
+	controllerByteData, err := json.MarshalIndent(controllerData, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -144,7 +144,7 @@ func SaveProject(projectName string) error {
 	var modelData modelData
 	modelData.Models = model.AllModels
 
-	modelByteData, err := json.Marshal(modelData)
+	modelByteData, err := json.MarshalIndent(modelData, "", "  ")
 	if err != nil {
 		return err
 	}

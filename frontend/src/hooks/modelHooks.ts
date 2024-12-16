@@ -7,11 +7,14 @@ import {
 } from "../../wailsjs/go/core/App";
 import { model } from "../../wailsjs/go/models";
 import toast from "react-hot-toast";
+import { useGlobalData } from "../stores/global";
 
 export const useGetAllModels = () => {
   const [data, setData] = useState<model.Model[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const reload = useGlobalData((state) => state.reload);
 
   const getModels = async () => {
     if (loading) return;
@@ -23,7 +26,7 @@ export const useGetAllModels = () => {
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while retrieving the models");
+      toast.error(`${error}`);
     }
 
     setLoading(false);
@@ -31,7 +34,7 @@ export const useGetAllModels = () => {
 
   useEffect(() => {
     getModels();
-  }, []);
+  }, [reload]);
 
   return {
     loading,
@@ -41,7 +44,7 @@ export const useGetAllModels = () => {
   };
 };
 
-export const useGetControllerByID = () => {
+export const useGetModelByID = () => {
   const [data, setData] = useState<model.Model>(
     model.Model.createFrom({
       description: "",
@@ -63,7 +66,7 @@ export const useGetControllerByID = () => {
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while retrieving the model");
+      toast.error(`${error}`);
     }
 
     setLoading(false);
@@ -88,9 +91,10 @@ export const useDeleteModelByID = () => {
     try {
       await DeleteModelByID(id);
       setSuccess(true);
+      toast.success("The model was deleted successfully");
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while deleting the model");
+      toast.error(`${error}`);
     }
 
     setLoading(false);
@@ -117,7 +121,7 @@ export const useCreateModel = () => {
       toast.success("A new model was created successfully");
     } catch (error) {
       setSuccess(false);
-      toast.error("An error occurred while creating the model");
+      toast.error(`${error}`);
     }
 
     setLoading(false);

@@ -30,7 +30,7 @@ function App() {
       <Toaster />
       <div className="w-full h-full flex">
         <Navigation />
-        <div className="px-10 py-5 w-full h-full overflow-x-hidden overflow-y-auto">
+        <div className="px-10 py-5 w-full h-full overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-webkit">
           {children[currentIndex]}
         </div>
       </div>
