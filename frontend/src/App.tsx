@@ -9,6 +9,7 @@ import Global from "./components/global/Global";
 import Events from "./components/events/Events";
 import Settings from "./components/settings/Settings";
 import { useGlobalData } from "./stores/global";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const children: React.ReactNode[] = [
@@ -25,12 +26,15 @@ function App() {
   const currentIndex = useGlobalData((state) => state.currentIndex);
 
   return (
-    <div className="w-full h-full flex">
-      <Navigation />
-      <div className="px-10 py-5 w-full h-full overflow-x-hidden overflow-y-auto">
-        {children[currentIndex]}
+    <>
+      <Toaster />
+      <div className="w-full h-full flex">
+        <Navigation />
+        <div className="px-10 py-5 w-full h-full overflow-x-hidden overflow-y-auto">
+          {children[currentIndex]}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

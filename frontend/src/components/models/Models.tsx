@@ -3,10 +3,12 @@ import { IoIosAdd } from "react-icons/io";
 import Modal from "../reusable/Modal";
 import { SearchNormal } from "iconsax-react";
 import NewModel from "./NewModel";
+import { useGetAllModels } from "../../hooks/modelHooks";
 // import nf from "../../assets/images/not_found.svg";
 
 const Models = () => {
   const [addModel, showAddModel] = useState<boolean>(false);
+  const { data, loading, success, getModels } = useGetAllModels();
 
   return (
     <>

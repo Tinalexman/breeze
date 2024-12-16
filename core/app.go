@@ -30,14 +30,7 @@ func (a *App) BeforeClose(ctx context.Context) bool {
 	return false
 }
 
-func (a *App) GetAllModels() []model.Model {
-	return model.AllModels
-}
-
-func (a *App) GetAllControllers() []controller.Controller {
-	return controller.AllControllers
-}
-
+// PROJECT
 func (a *App) CreateProject(name string) error {
 	currentProject := project.Project{}
 	err := currentProject.CreateNewProject(name)
@@ -59,4 +52,50 @@ func (a *App) LoadProject(name string) error {
 
 func (a *App) SaveProject(name string) error {
 	return project.SaveProject(name)
+}
+
+// CONTROLLERS
+func (a *App) GetAllControllers() []controller.Controller {
+	return controller.AllControllers
+}
+
+func (a *App) GetControllerByID(id string) controller.Controller {
+	c, ok := controller.GetControllerByID(id)
+	if ok {
+		return c
+	}
+	return controller.Controller{
+		ID: global.INVALID_ID,
+	}
+}
+
+func (a *App) CreateController(payload controller.CreateControllerPayload) {
+	controller.CreateNewController(payload)
+}
+
+func (a *App) DeleteControllerByID(id string) {
+	controller.DeleteControllerByID(id)
+}
+
+// MODEL
+func (a *App) GetAllModels() []model.Model {
+	return model.AllModels
+}
+
+func (a *App) GetModelByID(id string) model.Model {
+	c, ok := model.GetModelByID(id)
+	if ok {
+		return c
+	}
+	return model.Model{
+		ID: global.INVALID_ID,
+	}
+}
+
+func (a *App) CreateModel(payload model.CreateModelPayload) {
+	model.CreateNewModel(payload)
+}
+
+func (a *App) DeleteModelByID(id string) {
+	model.DeleteModelByID(id)
 }

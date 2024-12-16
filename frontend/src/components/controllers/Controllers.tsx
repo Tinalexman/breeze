@@ -3,17 +3,11 @@ import { SearchNormal } from "iconsax-react";
 import { IoIosAdd } from "react-icons/io";
 import Modal from "../reusable/Modal";
 import NewController from "./NewController";
-import { GetAllControllers } from "../../../wailsjs/go/core/App";
+import { useGetAllControllers } from "../../hooks/controllerHooks";
 
 const Controllers = () => {
   const [addController, showAddController] = useState<boolean>(false);
-
-  useEffect(() => {
-    let fn = async () => {
-      let c = await GetAllControllers();
-    };
-    fn();
-  }, []);
+  const { loading, success, data, getControllers } = useGetAllControllers();
 
   return (
     <>

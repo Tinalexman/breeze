@@ -3,11 +3,23 @@
 import {controller} from '../models';
 import {model} from '../models';
 
+export function CreateController(arg1:controller.CreateControllerPayload):Promise<void>;
+
+export function CreateModel(arg1:model.CreateModelPayload):Promise<void>;
+
 export function CreateProject(arg1:string):Promise<void>;
+
+export function DeleteControllerByID(arg1:string):Promise<void>;
+
+export function DeleteModelByID(arg1:string):Promise<void>;
 
 export function GetAllControllers():Promise<Array<controller.Controller>>;
 
 export function GetAllModels():Promise<Array<model.Model>>;
+
+export function GetControllerByID(arg1:string):Promise<controller.Controller>;
+
+export function GetModelByID(arg1:string):Promise<model.Model>;
 
 export function LoadProject(arg1:string):Promise<void>;
 

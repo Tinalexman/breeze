@@ -4,7 +4,7 @@ export namespace controller {
 	    name: string;
 	    description: string;
 	    id: string;
-	    model: string;
+	    modelID: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Controller(source);
@@ -15,7 +15,23 @@ export namespace controller {
 	        this.name = source["name"];
 	        this.description = source["description"];
 	        this.id = source["id"];
-	        this.model = source["model"];
+	        this.modelID = source["modelID"];
+	    }
+	}
+	export class CreateControllerPayload {
+	    name: string;
+	    description: string;
+	    modelID: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new CreateControllerPayload(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.description = source["description"];
+	        this.modelID = source["modelID"];
 	    }
 	}
 
@@ -23,6 +39,20 @@ export namespace controller {
 
 export namespace model {
 	
+	export class CreateModelPayload {
+	    name: string;
+	    description: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new CreateModelPayload(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.description = source["description"];
+	    }
+	}
 	export class ModelData {
 	    type: string;
 	    default: any;
