@@ -12,6 +12,14 @@ type Project struct {
 	Directory string `json:"directory"`
 }
 
+type modelData struct {
+	Models []model.Model `json:"models"`
+}
+
+type controllerData struct {
+	Controllers []controller.Controller `json:"controllers"`
+}
+
 func (p *Project) CreateNewProject(name string) error {
 	err := files.CreateNewDirectory(files.GetFullPath(name))
 	if err != nil {
@@ -64,6 +72,10 @@ func loadSingleFile(name, target string) ([]byte, error) {
 	return files.ReadContentFromFile(files.GetFullPath(name, target+".json"))
 }
 
+func writeSingleFile(name, target string, data []byte) error {
+	return files.WriteContentToFile(files.GetFullPath(name, target+".json"), data)
+}
+
 func createProjectData(directory string, data *Project) error {
 	err := files.CreateNewFile(directory)
 	if err != nil {
@@ -80,20 +92,67 @@ func createProjectData(directory string, data *Project) error {
 	return err
 }
 
-func LoadProject(name string) error {
-	modelData, err := loadSingleFile(name, "models")
+func LoadProject(projectName string) error {
+	// LOAD MODELS
+	modelByteData, err := loadSingleFile(projectName, "models")
 	if err != nil {
 		return err
 	}
 
-	model.Load(modelData)
+	var m modelData
 
-	controllerData, err := loadSingleFile(name, "controllers")
+	err = json.Unmarshal(modelByteData, &m)
+	if err != nil {
+		return err
+	}
+	model.AllModels = m.Models
+
+	// LOAD CONTROLLERS
+	controllerByteData, err := loadSingleFile(projectName, "controllers")
 	if err != nil {
 		return err
 	}
 
-	controller.Load(controllerData)
+	var c controllerData
+
+	err = json.Unmarshal(controllerByteData, &c)
+	if err != nil {
+		return err
+	}
+	controller.AllControllers = c.Controllers
+
+	return nil
+}
+
+func SaveProject(projectName string) error {
+
+	// SAVE CONTROLLERS
+	var controllerData controllerData
+	controllerData.Controllers = controller.AllControllers
+
+	controllerByteData, err := json.Marshal(controllerData)
+	if err != nil {
+		return err
+	}
+
+	err = writeSingleFile(projectName, "controllers", controllerByteData)
+	if err != nil {
+		return err
+	}
+
+	// SAVE MODELS
+	var modelData modelData
+	modelData.Models = model.AllModels
+
+	modelByteData, err := json.Marshal(modelData)
+	if err != nil {
+		return err
+	}
+
+	err = writeSingleFile(projectName, "models", modelByteData)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

@@ -31,11 +31,11 @@ func (a *App) BeforeClose(ctx context.Context) bool {
 }
 
 func (a *App) GetAllModels() []model.Model {
-	return model.GetAllModels()
+	return model.AllModels
 }
 
 func (a *App) GetAllControllers() []controller.Controller {
-	return controller.GetAllControllers()
+	return controller.AllControllers
 }
 
 func (a *App) CreateProject(name string) error {
@@ -55,4 +55,8 @@ func (a *App) LoadProject(name string) error {
 	}
 
 	return err
+}
+
+func (a *App) SaveProject(name string) error {
+	return project.SaveProject(name)
 }

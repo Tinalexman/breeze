@@ -1,11 +1,6 @@
 package model
 
-import (
-	"breeze/core/files"
-	"breeze/core/global"
-	"encoding/json"
-	"fmt"
-)
+import "breeze/core/util"
 
 const (
 	TYPE_STRING  = "String"
@@ -27,16 +22,10 @@ type Model struct {
 	MetaData    map[string]ModelData `json:"metadata"`
 }
 
-var allModels []Model
-
-func GetAllModels() []Model {
-	var models []Model = make([]Model, 0)
-	models = append(models, allModels...)
-	return models
-}
+var AllModels []Model = make([]Model, 0)
 
 func GetModelByID(id string) (Model, bool) {
-	for _, m := range allModels {
+	for _, m := range AllModels {
 		if m.ID == id {
 			return m, true
 		}
@@ -44,33 +33,30 @@ func GetModelByID(id string) (Model, bool) {
 	return Model{}, false
 }
 
-type modelData struct {
-	Models []Model `json:"models"`
-}
-
-var modelPath = files.GetFullPath(global.Global.CurrentProject.Name, "models.json")
-
-func Save() error {
-	var data modelData
-	data.Models = allModels
-
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		fmt.Println("Error marshaling struct:", err)
-		return err
+func CreateNewModel(name, description string) {
+	m := Model{
+		Name:        name,
+		Description: description,
+		ID:          util.GetHash(name),
 	}
 
-	return files.WriteContentToFile(modelPath, jsonData)
+	AllModels = append(AllModels, m)
 }
 
-func Load(byteData []byte) error {
-	var data modelData
-	err := json.Unmarshal(byteData, &data)
-	if err != nil {
-		fmt.Println("Error unmarshaling struct:", err)
-		return err
+func UpdateModelMetaData(id string, data map[string]ModelData) {
+	for i, m := range AllModels {
+		if m.ID == id {
+			AllModels[i].MetaData = data
+			return
+		}
 	}
+}
 
-	allModels = data.Models
-	return nil
+func DeleteModelByID(id string) {
+	for i, m := range AllModels {
+		if m.ID == id {
+			AllModels = append(AllModels[:i], AllModels[i+1:]...)
+			return
+		}
+	}
 }

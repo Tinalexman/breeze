@@ -2,6 +2,7 @@ export namespace controller {
 	
 	export class Controller {
 	    name: string;
+	    description: string;
 	    id: string;
 	    model: string;
 	
@@ -12,6 +13,7 @@ export namespace controller {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];
+	        this.description = source["description"];
 	        this.id = source["id"];
 	        this.model = source["model"];
 	    }

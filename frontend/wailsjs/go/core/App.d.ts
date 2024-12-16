@@ -3,6 +3,12 @@
 import {controller} from '../models';
 import {model} from '../models';
 
+export function CreateProject(arg1:string):Promise<void>;
+
 export function GetAllControllers():Promise<Array<controller.Controller>>;
 
 export function GetAllModels():Promise<Array<model.Model>>;
+
+export function LoadProject(arg1:string):Promise<void>;
+
+export function SaveProject(arg1:string):Promise<void>;
