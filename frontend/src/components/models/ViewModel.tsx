@@ -4,16 +4,16 @@ import CloseButton from "../reusable/CloseButton";
 import { useGetUniqueIcon } from "../../hooks/miscHooks";
 import HoverIcon from "../reusable/HoverIcon";
 import { IoTrash } from "react-icons/io5";
-import { MdModeEdit } from "react-icons/md";
 import { useDeleteModelByID } from "../../hooks/modelHooks";
 import { useGlobalData } from "../../stores/global";
 import AddNewComponent from "../reusable/AddNewComponent";
+import AddModelDataField from "../reusable/AddModelDataField";
 
-const ViewModel: FC<{ model?: model.Model; onExit: () => void }> = ({
-  model,
+const ViewModel: FC<{ breezeModel?: model.Model; onExit: () => void }> = ({
+  breezeModel,
   onExit,
 }) => {
-  if (model === undefined) return null;
+  if (breezeModel === undefined) return null;
 
   const reload = useGlobalData((state) => state.reloadCurrentPage);
 
@@ -24,10 +24,10 @@ const ViewModel: FC<{ model?: model.Model; onExit: () => void }> = ({
   } = useDeleteModelByID();
 
   const { getIconForId } = useGetUniqueIcon();
-  const Icon = getIconForId(model.id);
+  const Icon = getIconForId(breezeModel.id);
   const [metadata, setMetadata] = useState<{
     [key: string]: model.ModelData;
-  } | null>(model.metadata);
+  } | null>(null);
 
   useEffect(() => {
     if (!loadingDelete && deleteSuccess) {
@@ -38,10 +38,12 @@ const ViewModel: FC<{ model?: model.Model; onExit: () => void }> = ({
 
   return (
     <div className="w-full max-h-[calc(100vh-10.5rem)] flex flex-col gap-10 overflow-y-auto scrollbar-thin scrollbar-webkit bg-sh-1 rounded-2xl p-5">
-      <div className="space-y-2">
+      <div className="space-y-5">
         <div className="w-full flex justify-between items-center">
           <div className="w-fit flex items-center gap-2">
-            <h1 className="text-2xl text-white font-bold">{model.name}</h1>
+            <h1 className="text-2xl text-white font-bold">
+              {breezeModel.name}
+            </h1>
             <Icon className="text-sh-5" size={36} />
           </div>
           <div className="w-fit flex items-center gap-4">
@@ -49,18 +51,21 @@ const ViewModel: FC<{ model?: model.Model; onExit: () => void }> = ({
               icon={<IoTrash size={20} />}
               iconColor="text-white"
               backgroundColor="bg-red-500"
-              onClick={() => deleteModel(model.id)}
+              onClick={() => deleteModel(breezeModel.id)}
             />
             <CloseButton color="text-white" onClick={onExit} />
           </div>
         </div>
-        <p className="text-sh-4 font-light text-sm">
-          {model.description.length > 0
-            ? model.description
+        <p className="text-sh-4 font-light text-sm inline-flex items-end">
+          {breezeModel.description.length > 0
+            ? breezeModel.description
             : "No description provided"}
-          <span>
-            <MdModeEdit className="cursor-pointer" size={16} />
-          </span>
+          {/* <span>
+            <MdModeEdit
+              className="inline-block align-middle ml-2 cursor-pointer"
+              size={16}
+            />
+          </span> */}
         </p>
       </div>
       <div className="w-full flex flex-col gap-4">
@@ -69,7 +74,33 @@ const ViewModel: FC<{ model?: model.Model; onExit: () => void }> = ({
         </h2>
 
         {metadata === null && (
-          <AddNewComponent text="Add new fields to your model" />
+          <AddNewComponent
+            text="Add new fields to your model"
+            onClick={() => {
+              let newData: model.ModelData = model.ModelData.createFrom({
+                type: "String",
+                default: "",
+              });
+              setMetadata({
+                "New Field": newData,
+              });
+            }}
+          />
+        )}
+        {metadata !== null && (
+          <div className="w-full grid grid-cols-4 gap-4">
+            {Object.keys(metadata).map((v, i) => {
+              const value = metadata[v];
+              return (
+                <AddModelDataField
+                  key={i}
+                  name={v}
+                  modelType={value.type}
+                  onChange={(target: string, value: string) => {}}
+                />
+              );
+            })}
+          </div>
         )}
       </div>
     </div>
