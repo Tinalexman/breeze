@@ -29,6 +29,8 @@ export function GetControllerByID(arg1:string):Promise<controller.Controller>;
 
 export function GetModelByID(arg1:string):Promise<model.Model>;
 
+export function GetModelTypes():Promise<Array<string>>;
+
 export function GetRecentProjects():Promise<Array<string>>;
 
 export function GetRouteByID(arg1:string):Promise<route.Route>;

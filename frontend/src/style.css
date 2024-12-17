@@ -84,7 +84,7 @@ body {
   src: url("assets/fonts/outfit-900.ttf") format("truetype");
 }
 
-input {
+.global-input {
   background-color: #181818;
   border-radius: 6px;
   color: white;
@@ -92,6 +92,23 @@ input {
   padding-bottom: 0.5rem;
   font-weight: 400;
   outline: none;
+}
+
+.field-input {
+  background-color: #181818;
+  border-radius: 6px;
+  color: white;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: 400;
+  outline: none;
+}
+
+.field-input :hover {
+  background-color: #505050;
+}
+
+.field-input :focus {
 }
 
 ::selection {

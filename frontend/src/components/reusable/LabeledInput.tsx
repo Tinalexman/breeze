@@ -19,7 +19,9 @@ const LabeledInput: FC<{
           value={value}
           onChange={onChange}
           name={name}
-          className={`placeholder:text-sh-2 w-full ${className ?? ""}`}
+          className={`placeholder:text-sh-2 w-full global-input ${
+            className ?? ""
+          }`}
         />
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}

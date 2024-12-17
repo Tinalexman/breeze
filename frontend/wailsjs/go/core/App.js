@@ -50,6 +50,10 @@ export function GetModelByID(arg1) {
   return window['go']['core']['App']['GetModelByID'](arg1);
 }
 
+export function GetModelTypes() {
+  return window['go']['core']['App']['GetModelTypes']();
+}
+
 export function GetRecentProjects() {
   return window['go']['core']['App']['GetRecentProjects']();
 }

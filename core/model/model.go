@@ -1,11 +1,12 @@
 package model
 
 const (
-	TYPE_STRING  = "String"
-	TYPE_INTEGER = "Integer"
-	TYPE_DOUBLE  = "Double"
-	TYPE_BOOLEAN = "Boolean"
-	TYPE_LIST    = "List"
+	TYPE_STRING     = "String"
+	TYPE_INTEGER    = "Integer"
+	TYPE_DOUBLE     = "Double"
+	TYPE_BOOLEAN    = "Boolean"
+	TYPE_LIST       = "List"
+	TYPE_OBJECT_REF = "Object"
 )
 
 type ModelData struct {

@@ -72,3 +72,14 @@ func DeleteModelByID(id string) error {
 
 	return fmt.Errorf("Model with ID '%s' does not exist", id)
 }
+
+func GetModelTypes() []string {
+	return []string{
+		TYPE_BOOLEAN,
+		TYPE_DOUBLE,
+		TYPE_INTEGER,
+		TYPE_LIST,
+		TYPE_STRING,
+		TYPE_OBJECT_REF,
+	}
+}

@@ -25,9 +25,9 @@ function Dashboard() {
   const currentIndex = useGlobalData((state) => state.currentIndex);
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full flex h-[100vh]">
       <Navigation />
-      <div className="px-10 py-5 w-full h-full overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-webkit">
+      <div className="px-10 bg-background w-full overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-webkit">
         {children[currentIndex]}
       </div>
     </div>

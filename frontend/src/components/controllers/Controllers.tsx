@@ -8,6 +8,7 @@ import { useGetUniqueIcon } from "../../hooks/miscHooks";
 import EmptyState from "../reusable/EmptyState";
 import ItemContainer from "../reusable/ItemContainer";
 import GroupRevealer from "../reusable/GroupRevealer";
+import Reveal from "../reusable/Reveal";
 
 const Controllers = () => {
   const [addController, showAddController] = useState<boolean>(false);
@@ -19,7 +20,7 @@ const Controllers = () => {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-5">
+      <div className="w-full flex flex-col gap-5 sticky top-0 z-5 pt-5 bg-background">
         <div className="h-[7.5rem] flex flex-col w-full gap-5">
           <div>
             <h1 className="text-4xl text-white font-bold">Controllers</h1>
@@ -27,13 +28,18 @@ const Controllers = () => {
               Define and manage all your controllers all in one place
             </p>
           </div>
-          {indexOfSelectedController === -1 && (
+          <Reveal
+            visible={indexOfSelectedController === -1}
+            transition={{
+              y: ["50%", "0%"],
+            }}
+          >
             <div className="flex w-full justify-between">
               <div className="w-[250px] relative">
                 <input
                   type="text"
                   placeholder="Search controller"
-                  className="placeholder:text-sh-2 pl-8 pr-4 w-full"
+                  className="placeholder:text-sh-2 pl-8 pr-4 w-full global-input"
                   onChange={(e) => {
                     const res = e.target.value.trim();
                     setSearch(res);
@@ -52,8 +58,8 @@ const Controllers = () => {
                 <IoIosAdd className="text-xl" />
                 New Controller
               </button>
-            </div>
-          )}
+            </div>{" "}
+          </Reveal>
         </div>
       </div>
       <GroupRevealer

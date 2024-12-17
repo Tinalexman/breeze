@@ -5,9 +5,12 @@ import (
 	// "breeze/core/util"
 )
 
-// MODEL
 func (a *App) GetAllModels(search string) []model.Model {
 	return model.GetAllModels(search)
+}
+
+func (a *App) GetModelTypes() []string {
+	return model.GetModelTypes()
 }
 
 func (a *App) GetModelByID(id string) (model.Model, error) {

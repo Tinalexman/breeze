@@ -20,7 +20,7 @@ const Models = () => {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-5">
+      <div className="w-full flex flex-col gap-5 sticky top-0 z-5 pt-5 bg-background">
         <div className="h-[7.5rem] flex flex-col w-full gap-5">
           <div>
             <h1 className="text-4xl text-white font-bold">Models</h1>
@@ -28,14 +28,19 @@ const Models = () => {
               Define and manage all your models all in one place
             </p>
           </div>
-          {indexOfSelectedModel === -1 && (
+          <Reveal
+            visible={indexOfSelectedModel === -1}
+            transition={{
+              y: ["50%", "0%"],
+            }}
+          >
             <div className="flex w-full justify-between">
               <div className="w-[250px] relative">
                 <input
                   type="text"
                   placeholder="Search model"
                   value={search}
-                  className="placeholder:text-sh-2 pl-8 pr-4 w-full"
+                  className="placeholder:text-sh-2 pl-8 pr-4 w-full global-input"
                   onChange={(e) => {
                     const res = e.target.value.trim();
                     setSearch(res);
@@ -57,7 +62,7 @@ const Models = () => {
                 New Model
               </button>
             </div>
-          )}
+          </Reveal>
         </div>
       </div>
       <Modal

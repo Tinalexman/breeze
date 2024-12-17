@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#131313",
+        background: "#202020",
         overlay: "rgba(0, 0, 0, 0.2)",
         "sh-1": "#303236",
         "sh-2": "#4B555C",
@@ -29,14 +29,14 @@ export default {
       const newUtilities = {
         ".scrollbar-thin": {
           scrollbarWidth: "thin",
-          scrollbarColor: "rgb(135 135 135) rgb(247 247 247)",
+          scrollbarColor: "rgb(135 135 135) rgb(32 32 32)",
         },
         ".scrollbar-webkit": {
           "&::-webkit-scrollbar": {
             width: "8px",
           },
           "&::-webkit-scrollbar-track": {
-            background: "rgb(247 247 247)",
+            background: "rgb(32 32 32)",
           },
           "&::-webkit-scrollbar-thumb": {
             background: "rgb(135 135 135)",

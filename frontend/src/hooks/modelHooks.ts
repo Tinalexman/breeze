@@ -3,6 +3,7 @@ import {
   CreateModel,
   DeleteModelByID,
   GetAllModels,
+  GetModelTypes,
   GetModelByID,
 } from "../../wailsjs/go/core/App";
 import { model } from "../../wailsjs/go/models";
@@ -41,6 +42,41 @@ export const useGetAllModels = () => {
     success,
     data,
     getModels,
+  };
+};
+
+export const useGetModelTypes = () => {
+  const [data, setData] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+
+  const reload = useGlobalData((state) => state.reload);
+
+  const getTypes = async (search?: string) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      let t = await GetModelTypes();
+      setData(t);
+      setSuccess(true);
+    } catch (error) {
+      setSuccess(false);
+      toast.error(`${error}`);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getTypes();
+  }, [reload]);
+
+  return {
+    loading,
+    success,
+    data,
+    getTypes,
   };
 };
 
