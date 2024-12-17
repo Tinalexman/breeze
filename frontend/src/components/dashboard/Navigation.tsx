@@ -9,6 +9,9 @@ import {
   Mirror,
 } from "iconsax-react";
 import { useGlobalData } from "../../stores/global";
+import logo from "../../assets/images/breeze.png";
+
+import { motion } from "framer-motion";
 
 type NavigationItem = {
   name: string;
@@ -104,6 +107,37 @@ const Navigation = () => {
     <div
       className={`w-[250px] h-[100vh] relative px-3 flex flex-col items-center gap-10 justify-center duration-300 ease-out transition-all border-r-[1px] shadow-custom border-sh-1`}
     >
+      <div>
+        <motion.div
+          animate={{
+            x: ["-10%", "0%", "10%", "0%", "-10%"],
+            rotate: ["0deg", "0deg", "180deg", "0deg", "0deg"],
+            scale: [0.9, 1.0, 0.9],
+          }}
+          transition={{
+            duration: 5,
+            ease: "easeOut",
+            repeat: Infinity,
+          }}
+        >
+          <img src={logo} alt="logo" className="size-[48px]" />
+        </motion.div>
+        <motion.h2
+          animate={{
+            x: ["2.5%", "0%", "-2.5%", "0%", "2.5%"],
+            scale: [1.0, 0.9, 1.0],
+            rotateZ: ["0deg", "2.5deg", "0deg", "-2.5deg", "0deg"],
+          }}
+          transition={{
+            duration: 3,
+            ease: "easeOut",
+            repeat: Infinity,
+          }}
+          className="text-lg font-semibold text-white"
+        >
+          Breeze
+        </motion.h2>
+      </div>
       <div className="w-full h-fit flex flex-col gap-4">
         {navigationItems.map((item, i) => {
           const selected = currentIndex === i;

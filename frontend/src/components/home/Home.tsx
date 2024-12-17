@@ -17,7 +17,6 @@ const Home = () => {
   return (
     <>
       <div className="w-[100vw] h-[100vh] relative overflow-hidden">
-        {/* <Link to="/">Home</Link></li> */}
         <div className="w-full h-full flex flex-col justify-center items-center z-0 absolute">
           <img src={logo} alt="logo" />
           <h1 className="text-6xl text-white font-bold">Breeze</h1>
