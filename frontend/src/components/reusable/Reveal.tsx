@@ -6,6 +6,7 @@ export interface iTweenTransition {
   y?: string | number | (number | string)[];
   scale?: string | number | (number | string)[];
   opacity?: string | number | (number | string)[];
+  rotate?: string | number | (number | string)[];
 }
 
 const Reveal: FC<{
@@ -22,12 +23,12 @@ const Reveal: FC<{
             y: transition?.y,
             scale: transition?.scale,
             opacity: transition?.opacity,
+            rotate: transition?.rotate,
           }}
           transition={{
             duration: 0.5,
             ease: "easeOut",
           }}
-          className="w-full h-full"
         >
           {children}
         </motion.div>

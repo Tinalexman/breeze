@@ -13,7 +13,7 @@ import GroupRevealer from "../reusable/GroupRevealer";
 
 const Models = () => {
   const [addModel, showAddModel] = useState<boolean>(false);
-  const [searching, isSearching] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
   const [indexOfSelectedModel, setIndexOfSelectedModel] = useState<number>(-1);
   const { data, loading, getModels } = useGetAllModels();
   const { getIconForId } = useGetUniqueIcon();
@@ -34,10 +34,11 @@ const Models = () => {
                 <input
                   type="text"
                   placeholder="Search model"
+                  value={search}
                   className="placeholder:text-sh-2 pl-8 pr-4 w-full"
                   onChange={(e) => {
                     const res = e.target.value.trim();
-                    isSearching(res.length > 0);
+                    setSearch(res);
                     getModels(res);
                   }}
                 />
@@ -89,7 +90,7 @@ const Models = () => {
             {!loading && data.length === 0 && (
               <EmptyState
                 content={
-                  searching
+                  search !== ""
                     ? "No models match your search"
                     : "You have not created any models yet"
                 }
