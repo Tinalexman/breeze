@@ -46,8 +46,9 @@ func CreateNewRoute(payload CreateRoutePayload) error {
 	r := Route{
 		Name:         payload.Name,
 		ControllerID: payload.ControllerID,
-		Description:  payload.Description,
+		Description:  util.Ternary(payload.Description, "No Description Provided", len(payload.Description) > 0).(string),
 		ID:           util.GetHash(payload.Name),
+		Data:         make([]RouteData, 0),
 	}
 
 	AllRoutes = append(AllRoutes, r)

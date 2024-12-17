@@ -5,6 +5,7 @@ import {
   GetAllModels,
   GetModelTypes,
   GetModelByID,
+  UpdateModel,
 } from "../../wailsjs/go/core/App";
 import { model } from "../../wailsjs/go/models";
 import toast from "react-hot-toast";
@@ -167,5 +168,36 @@ export const useCreateModel = () => {
     loading,
     success,
     createModel,
+  };
+};
+
+export const useUpdateModel = (showToast?: boolean) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+
+  const updateModel = async (payload: model.UpdateModelPayload) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      await UpdateModel(payload);
+      setSuccess(true);
+      if (showToast && showToast) {
+        toast.success("Model Updated");
+      }
+    } catch (error) {
+      setSuccess(false);
+      if (showToast && showToast) {
+        toast.error(`${error}`);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  return {
+    loading,
+    success,
+    updateModel,
   };
 };

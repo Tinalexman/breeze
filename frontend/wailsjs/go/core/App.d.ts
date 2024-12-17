@@ -45,4 +45,4 @@ export function SaveCurrentProject():Promise<void>;
 
 export function SaveProject(arg1:string):Promise<void>;
 
-export function UpdateModelMetaData(arg1:string,arg2:{[key: string]: model.ModelData}):Promise<void>;
+export function UpdateModel(arg1:model.UpdateModelPayload):Promise<void>;

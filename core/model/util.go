@@ -11,6 +11,13 @@ type CreateModelPayload struct {
 	Description string `json:"description"`
 }
 
+type UpdateModelPayload struct {
+	ID          string      `json:"id"`
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	MetaData    []ModelData `json:"metadata"`
+}
+
 func GetAllModels(search string) []Model {
 	if search == "" {
 		return AllModels
@@ -43,23 +50,29 @@ func CreateNewModel(payload CreateModelPayload) error {
 
 	m := Model{
 		Name:        payload.Name,
-		Description: payload.Description,
+		Description: util.Ternary(payload.Description, "No Description Provided", len(payload.Description) > 0).(string),
 		ID:          util.GetHash(payload.Name),
+		MetaData:    make([]ModelData, 0),
 	}
 
 	AllModels = append(AllModels, m)
 	return nil
 }
 
-func UpdateModelMetaData(id string, data map[string]ModelData) error {
+func UpdateModel(data UpdateModelPayload) error {
 	for i, m := range AllModels {
-		if m.ID == id {
-			AllModels[i].MetaData = data
+		if m.ID == data.ID {
+			AllModels[i] = Model{
+				Name:        data.Name,
+				ID:          data.ID,
+				Description: data.Description,
+				MetaData:    data.MetaData,
+			}
 			return nil
 		}
 	}
 
-	return fmt.Errorf("Model with ID '%s' does not exist", id)
+	return fmt.Errorf("Model with ID '%s' does not exist", data.ID)
 }
 
 func DeleteModelByID(id string) error {

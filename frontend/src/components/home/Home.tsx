@@ -49,7 +49,7 @@ const Home = () => {
                 repeat: Infinity,
                 delay: i * 0.2,
               }}
-              className={`h-[1px] absolute bg-gradient-to-r from-transparent to-sh-1 bg-opacity-50 left-0 -z-0`}
+              className={`h-[1px] absolute bg-gradient-to-r from-transparent to-sh-1 bg-opacity-50 left-0 -z-1`}
               style={{
                 top: `${(i + 1) * 10}vh`,
               }}
@@ -69,7 +69,7 @@ const Home = () => {
                 repeat: Infinity,
                 delay: i * 0.25,
               }}
-              className={`w-[1px] absolute bg-gradient-to-b from-transparent to-sh-1 bg-opacity-50 top-0 -z-0`}
+              className={`w-[1px] absolute bg-gradient-to-b from-transparent to-sh-1 bg-opacity-50 top-0 -z-1`}
               style={{
                 left: `${(i + 1) * 10}vw`,
               }}

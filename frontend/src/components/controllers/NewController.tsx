@@ -61,6 +61,7 @@ const NewController: FC<{ onClose: () => void }> = ({ onClose }) => {
           handleSubmit,
           setFieldValue,
           isValid,
+          validateForm,
         }) => (
           <Form
             method="POST"
@@ -94,6 +95,7 @@ const NewController: FC<{ onClose: () => void }> = ({ onClose }) => {
                   onClick: () => {
                     setFieldValue("model", model.name);
                     setFieldValue("modelID", model.id);
+                    validateForm();
                   },
                 };
               })}

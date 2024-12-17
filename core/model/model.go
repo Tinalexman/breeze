@@ -10,15 +10,16 @@ const (
 )
 
 type ModelData struct {
+	Name         string      `json:"name"`
 	Type         string      `json:"type"`
 	DefaultValue interface{} `json:"default"`
 }
 
 type Model struct {
-	Name        string               `json:"name"`
-	ID          string               `json:"id"`
-	Description string               `json:"description"`
-	MetaData    map[string]ModelData `json:"metadata"`
+	Name        string      `json:"name"`
+	ID          string      `json:"id"`
+	Description string      `json:"description"`
+	MetaData    []ModelData `json:"metadata"`
 }
 
 var AllModels []Model = make([]Model, 0)

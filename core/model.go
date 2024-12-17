@@ -30,8 +30,8 @@ func (a *App) CreateModel(payload model.CreateModelPayload) error {
 	return err
 }
 
-func (a *App) UpdateModelMetaData(id string, data map[string]model.ModelData) error {
-	err := model.UpdateModelMetaData(id, data)
+func (a *App) UpdateModel(payload model.UpdateModelPayload) error {
+	err := model.UpdateModel(payload)
 	if err == nil {
 		a.SaveCurrentProject()
 	}

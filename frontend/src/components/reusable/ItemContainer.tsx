@@ -17,7 +17,7 @@ const ItemContainer: FC<{
       <div className="flex flex-col w-[calc(100%-1rem-40px)]">
         <h2 className="text-white font-medium">{name}</h2>
         <p className="text-sh-4 font-light text-xs line-clamp-1">
-          {description.length > 0 ? description : "No description provided"}
+          {description}
         </p>
       </div>
     </div>

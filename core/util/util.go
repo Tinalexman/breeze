@@ -89,3 +89,10 @@ func Logger() (log *logrus.Logger) {
 
 // 	return
 // }
+
+func Ternary(first, second interface{}, condition bool) interface{} {
+	if condition {
+		return first
+	}
+	return second
+}

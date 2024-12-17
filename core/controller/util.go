@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"breeze/core/network"
 	"breeze/core/util"
 	"fmt"
 	"strings"
@@ -46,8 +47,9 @@ func CreateNewController(payload CreateControllerPayload) error {
 	c := Controller{
 		Name:        payload.Name,
 		ModelID:     payload.ModelID,
-		Description: payload.Description,
+		Description: util.Ternary(payload.Description, "No Description Provided", len(payload.Description) > 0).(string),
 		ID:          util.GetHash(payload.Name),
+		Handlers:    make([]network.Handler, 0),
 	}
 
 	AllControllers = append(AllControllers, c)

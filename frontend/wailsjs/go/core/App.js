@@ -82,6 +82,6 @@ export function SaveProject(arg1) {
   return window['go']['core']['App']['SaveProject'](arg1);
 }
 
-export function UpdateModelMetaData(arg1, arg2) {
-  return window['go']['core']['App']['UpdateModelMetaData'](arg1, arg2);
+export function UpdateModel(arg1) {
+  return window['go']['core']['App']['UpdateModel'](arg1);
 }
