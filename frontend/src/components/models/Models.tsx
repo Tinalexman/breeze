@@ -5,12 +5,14 @@ import { SearchNormal } from "iconsax-react";
 import NewModel from "./NewModel";
 import { useGetAllModels } from "../../hooks/modelHooks";
 import ModelContainer from "./ModelContainer";
-import Loader from "../reusable/Loader";
-// import nf from "../../assets/images/not_found.svg";
+import { useGetUniqueIcon } from "../../hooks/miscHooks";
+import EmptyState from "../reusable/EmptyState";
 
 const Models = () => {
   const [addModel, showAddModel] = useState<boolean>(false);
+  const [searching, isSearching] = useState<boolean>(false);
   const { data, loading, success, getModels } = useGetAllModels();
+  const { getIconForId } = useGetUniqueIcon();
 
   return (
     <>
@@ -27,6 +29,7 @@ const Models = () => {
               className="placeholder:text-sh-2 pl-8 pr-4 w-full"
               onChange={(e) => {
                 const res = e.target.value.trim();
+                isSearching(res.length > 0);
                 getModels(res);
               }}
             />
@@ -45,12 +48,28 @@ const Models = () => {
             New Model
           </button>
         </div>
-        <div className="w-full grid grid-cols-4">
+        <div className="w-full grid grid-cols-4 gap-5 mt-10">
           {!loading &&
             data.map((model, i) => {
-              return <ModelContainer key={i} model={model} />;
+              return (
+                <ModelContainer
+                  key={i}
+                  model={model}
+                  icon={getIconForId(model.id)}
+                />
+              );
             })}
         </div>
+        {!loading && data.length === 0 && (
+          <EmptyState
+            content={
+              searching
+                ? "No models match your search"
+                : "You have not created any models yet"
+            }
+            height="70vh"
+          />
+        )}
       </div>
       <Modal
         visible={addModel}
