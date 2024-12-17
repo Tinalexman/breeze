@@ -1,14 +1,13 @@
 import React from "react";
 
-import { Toaster } from "react-hot-toast";
 import { Global, Settings } from "iconsax-react";
-import { Routes } from "react-router-dom";
 import Controllers from "../controllers/Controllers";
 import Events from "../events/Events";
 import Middlewares from "../middlewares/Middlewares";
 import Models from "../models/Models";
 import Overview from "../overview/Overview";
 import Navigation from "./Navigation";
+import Routes from "../routes/Routes";
 import { useGlobalData } from "../../stores/global";
 
 function Dashboard() {

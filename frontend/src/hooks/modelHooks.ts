@@ -91,7 +91,7 @@ export const useDeleteModelByID = () => {
     try {
       await DeleteModelByID(id);
       setSuccess(true);
-      toast.success("The model was deleted successfully");
+      toast.success("Model Deleted");
     } catch (error) {
       setSuccess(false);
       toast.error(`${error}`);
@@ -118,7 +118,7 @@ export const useCreateModel = () => {
     try {
       await CreateModel(payload);
       setSuccess(true);
-      toast.success("A new model was created successfully");
+      toast.success("Model Created");
     } catch (error) {
       setSuccess(false);
       toast.error(`${error}`);

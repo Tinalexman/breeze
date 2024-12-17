@@ -15,7 +15,7 @@ const NewController: FC<{ onClose: () => void }> = ({ onClose }) => {
   const reloadPage = useGlobalData((state) => state.reloadCurrentPage);
 
   useEffect(() => {
-    if (loading && success) {
+    if (!loading && success) {
       reloadPage();
       onClose();
     }

@@ -1,13 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SearchNormal } from "iconsax-react";
 import { IoIosAdd } from "react-icons/io";
 import Modal from "../reusable/Modal";
 import NewController from "./NewController";
 import { useGetAllControllers } from "../../hooks/controllerHooks";
+import { useGetUniqueIcon } from "../../hooks/miscHooks";
+import EmptyState from "../reusable/EmptyState";
+import ItemContainer from "../reusable/ItemContainer";
 
 const Controllers = () => {
   const [addController, showAddController] = useState<boolean>(false);
-  const { loading, success, data, getControllers } = useGetAllControllers();
+  const { loading, data, getControllers } = useGetAllControllers();
+  const [searching, isSearching] = useState<boolean>(false);
+  const { getIconForId } = useGetUniqueIcon();
 
   return (
     <>
@@ -22,6 +27,11 @@ const Controllers = () => {
               type="text"
               placeholder="Search controller"
               className="placeholder:text-sh-2 pl-8 pr-4 w-full"
+              onChange={(e) => {
+                const res = e.target.value.trim();
+                isSearching(res.length > 0);
+                getControllers(res);
+              }}
             />
             <SearchNormal
               className="text-sh-2 absolute top-1/2 left-2 -translate-y-1/2"
@@ -36,6 +46,29 @@ const Controllers = () => {
             New Controller
           </button>
         </div>
+        <div className="w-full grid grid-cols-4 gap-5 mt-10">
+          {!loading &&
+            data.map((controller, i) => {
+              return (
+                <ItemContainer
+                  key={i}
+                  name={controller.name}
+                  description={controller.description}
+                  icon={getIconForId(controller.id)}
+                />
+              );
+            })}
+        </div>
+        {!loading && data.length === 0 && (
+          <EmptyState
+            content={
+              searching
+                ? "No controllers match your search"
+                : "You have not created any controllers yet"
+            }
+            height="70vh"
+          />
+        )}
       </div>
       <Modal
         visible={addController}

@@ -4,14 +4,14 @@ import Modal from "../reusable/Modal";
 import { SearchNormal } from "iconsax-react";
 import NewModel from "./NewModel";
 import { useGetAllModels } from "../../hooks/modelHooks";
-import ModelContainer from "./ModelContainer";
 import { useGetUniqueIcon } from "../../hooks/miscHooks";
 import EmptyState from "../reusable/EmptyState";
+import ItemContainer from "../reusable/ItemContainer";
 
 const Models = () => {
   const [addModel, showAddModel] = useState<boolean>(false);
   const [searching, isSearching] = useState<boolean>(false);
-  const { data, loading, success, getModels } = useGetAllModels();
+  const { data, loading, getModels } = useGetAllModels();
   const { getIconForId } = useGetUniqueIcon();
 
   return (
@@ -52,9 +52,10 @@ const Models = () => {
           {!loading &&
             data.map((model, i) => {
               return (
-                <ModelContainer
+                <ItemContainer
                   key={i}
-                  model={model}
+                  name={model.name}
+                  description={model.description}
                   icon={getIconForId(model.id)}
                 />
               );

@@ -90,7 +90,7 @@ export const useDeleteControllerByID = () => {
     try {
       await DeleteControllerByID(id);
       setSuccess(true);
-      toast.success("The controller was deleted successfully");
+      toast.success("Controller Deleted");
     } catch (error) {
       setSuccess(false);
       toast.error(`${error}`);
@@ -119,7 +119,7 @@ export const useCreateController = () => {
     try {
       await CreateController(payload);
       setSuccess(true);
-      toast.success("A new controller was created successfully");
+      toast.success("Controller Created");
     } catch (error) {
       setSuccess(false);
       toast.error(`${error}`);
