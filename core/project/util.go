@@ -6,6 +6,7 @@ import (
 	"breeze/core/global"
 	"breeze/core/model"
 	"breeze/core/route"
+	"breeze/core/service"
 	"encoding/json"
 	"fmt"
 )
@@ -20,6 +21,10 @@ type controllerData struct {
 
 type routeData struct {
 	Routes []route.Route `json:"routes"`
+}
+
+type serviceData struct {
+	Services []service.Service `json:"services"`
 }
 
 type CreateNewProjectPayload struct {
@@ -89,6 +94,7 @@ func createProjectData(directory string, data *Project) error {
 }
 
 func (p *Project) LoadProject() error {
+
 	// LOAD MODELS
 	modelByteData, err := loadSingleFile(p.Name, global.MODEL_FILE_NAME)
 	if err != nil {
@@ -117,7 +123,21 @@ func (p *Project) LoadProject() error {
 	}
 	controller.AllControllers = c.Controllers
 
-	// LOAD CONTROLLERS
+	// LOAD SERVICES
+	serviceByteData, err := loadSingleFile(p.Name, global.SERVICES_FILE_NAME)
+	if err != nil {
+		return err
+	}
+
+	var s serviceData
+
+	err = json.Unmarshal(serviceByteData, &s)
+	if err != nil {
+		return err
+	}
+	service.AllServices = s.Services
+
+	// LOAD ROUTES
 	routeByteData, err := loadSingleFile(p.Name, global.ROUTE_FILE_NAME)
 	if err != nil {
 		return err
@@ -150,6 +170,11 @@ func (p *Project) SaveProject() error {
 		return err
 	}
 
+	err = p.saveServices()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -160,6 +185,8 @@ func (p *Project) Save(target string) error {
 		return p.saveModels()
 	} else if target == global.ROUTE_FILE_NAME {
 		return p.saveRoutes()
+	} else if target == global.SERVICES_FILE_NAME {
+		return p.saveServices()
 	}
 
 	return nil
@@ -201,5 +228,18 @@ func (p *Project) saveRoutes() error {
 	}
 
 	err = writeSingleFile(p.Name, global.ROUTE_FILE_NAME, routeByteData)
+	return err
+}
+
+func (p *Project) saveServices() error {
+	var serviceData serviceData
+	serviceData.Services = service.AllServices
+
+	serviceByteData, err := json.MarshalIndent(serviceData, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	err = writeSingleFile(p.Name, global.SERVICES_FILE_NAME, serviceByteData)
 	return err
 }
