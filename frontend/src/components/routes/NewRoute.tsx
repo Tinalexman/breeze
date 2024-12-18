@@ -4,13 +4,13 @@ import CloseButton from "../reusable/CloseButton";
 import { Form, Formik } from "formik";
 import LabeledInput from "../reusable/LabeledInput";
 import Dropdown from "../reusable/input/Dropdown";
-import { useGetAllControllers } from "../../hooks/controllerHooks";
+import { useGetAllServices } from "../../hooks/servicesHooks";
 import Loader from "../reusable/Loader";
 import { useCreateRoute } from "../../hooks/routeHooks";
 import { useGlobalData } from "../../stores/global";
 
 const NewRoute: FC<{ onClose: () => void }> = ({ onClose }) => {
-  const { data, loading: loadingControllers } = useGetAllControllers();
+  const { data, loading: loadingServices } = useGetAllServices();
   const { loading, success, createRoute } = useCreateRoute();
   const reloadPage = useGlobalData((state) => state.reloadCurrentPage);
 
@@ -33,8 +33,8 @@ const NewRoute: FC<{ onClose: () => void }> = ({ onClose }) => {
         initialValues={{
           name: "",
           description: "",
-          controller: "",
-          controllerID: "",
+          service: "",
+          serviceID: "",
         }}
         validate={(values) => {
           const errors: any = {};
@@ -42,8 +42,8 @@ const NewRoute: FC<{ onClose: () => void }> = ({ onClose }) => {
             errors.name = "The name of the route is required";
           }
 
-          if (!values.controller) {
-            errors.controller = "The controller is required";
+          if (!values.service) {
+            errors.service = "The service is required";
           }
 
           return errors;
@@ -84,27 +84,27 @@ const NewRoute: FC<{ onClose: () => void }> = ({ onClose }) => {
             />
 
             <Dropdown
-              label="Controller"
-              hint="Select a controller"
-              menus={data.map((controller, i) => {
+              label="Service"
+              hint="Select a service"
+              menus={data.map((service, i) => {
                 return {
-                  name: controller.name,
+                  name: service.name,
                   onClick: () => {
-                    setFieldValue("controller", controller.name);
-                    setFieldValue("controllerID", controller.id);
+                    setFieldValue("service", service.name);
+                    setFieldValue("serviceID", service.id);
                   },
                 };
               })}
-              value={values.controller}
-              error={errors.controller}
-              loading={loadingControllers}
+              value={values.service}
+              error={errors.service}
+              loading={loadingServices}
             />
 
             <button
               type="submit"
-              className={`bg-route-yellow ${
+              className={`bg-services-slate ${
                 !isValid && "bg-opacity-50"
-              }  mt-5 rounded text-monokai text-sm grid place-content-center font-normal w-[100px] py-2`}
+              }  mt-5 rounded text-white text-sm grid place-content-center font-normal w-[100px] py-2`}
             >
               {loading ? <Loader color="#101010" /> : "Create"}
             </button>

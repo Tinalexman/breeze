@@ -17,6 +17,7 @@ export default {
         "route-yellow": "#EAB308",
         "middleware-purple": "#A855F7",
         "events-orange": "#F97316",
+        "services-slate": "#334155",
         "settings-teal": "#14B8A6",
       },
       boxShadow: {

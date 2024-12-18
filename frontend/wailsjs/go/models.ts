@@ -179,6 +179,25 @@ export namespace model {
 
 }
 
+export namespace network {
+	
+	export class HandlerData {
+	    id: string;
+	    steps: {[key: string]: any};
+	
+	    static createFrom(source: any = {}) {
+	        return new HandlerData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.steps = source["steps"];
+	    }
+	}
+
+}
+
 export namespace project {
 	
 	export class CreateNewProjectPayload {
@@ -201,7 +220,7 @@ export namespace route {
 	export class CreateRoutePayload {
 	    name: string;
 	    description: string;
-	    controllerID: string;
+	    serviceID: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new CreateRoutePayload(source);
@@ -211,10 +230,11 @@ export namespace route {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];
 	        this.description = source["description"];
-	        this.controllerID = source["controllerID"];
+	        this.serviceID = source["serviceID"];
 	    }
 	}
 	export class RouteData {
+	    id: string;
 	    method: string;
 	    path: string;
 	
@@ -224,27 +244,22 @@ export namespace route {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
 	        this.method = source["method"];
 	        this.path = source["path"];
 	    }
 	}
-	export class Route {
-	    name: string;
+	export class ModifyRouteDataPayload {
 	    id: string;
-	    description: string;
-	    controllerID: string;
-	    data: RouteData[];
+	    data: RouteData;
 	
 	    static createFrom(source: any = {}) {
-	        return new Route(source);
+	        return new ModifyRouteDataPayload(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.name = source["name"];
 	        this.id = source["id"];
-	        this.description = source["description"];
-	        this.controllerID = source["controllerID"];
 	        this.data = this.convertValues(source["data"], RouteData);
 	    }
 	
@@ -265,6 +280,115 @@ export namespace route {
 		    }
 		    return a;
 		}
+	}
+	export class Route {
+	    name: string;
+	    id: string;
+	    description: string;
+	    serviceID: string;
+	    data: RouteData[];
+	
+	    static createFrom(source: any = {}) {
+	        return new Route(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.id = source["id"];
+	        this.description = source["description"];
+	        this.serviceID = source["serviceID"];
+	        this.data = this.convertValues(source["data"], RouteData);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
+export namespace service {
+	
+	export class CreateServicePayload {
+	    name: string;
+	    description: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new CreateServicePayload(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.description = source["description"];
+	    }
+	}
+	export class Service {
+	    name: string;
+	    description: string;
+	    id: string;
+	    data: network.HandlerData[];
+	
+	    static createFrom(source: any = {}) {
+	        return new Service(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.description = source["description"];
+	        this.id = source["id"];
+	        this.data = this.convertValues(source["data"], network.HandlerData);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class UpdateServicePayload {
+	    name: string;
+	    id: string;
+	    description: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new UpdateServicePayload(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.id = source["id"];
+	        this.description = source["description"];
+	    }
 	}
 
 }

@@ -1,31 +1,29 @@
 import { useState, useEffect } from "react";
 import {
-  GetAllRoutes,
-  CreateRoute,
-  GetRouteByID,
-  DeleteRouteByID,
-  AddRouteData,
-  RemoveRouteData,
-  UpdateRouteData,
+  GetAllServices,
+  CreateService,
+  GetServiceByID,
+  DeleteServiceByID,
+  UpdateService,
 } from "../../wailsjs/go/core/App";
-import { route } from "../../wailsjs/go/models";
+import { service } from "../../wailsjs/go/models";
 import toast from "react-hot-toast";
 import { useGlobalData } from "../stores/global";
 
-export const useGetAllRoutes = () => {
-  const [data, setData] = useState<route.Route[]>([]);
+export const useGetAllServices = () => {
+  const [data, setData] = useState<service.Service[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
 
   const reload = useGlobalData((state) => state.reload);
 
-  const getRoutes = async (search?: string) => {
+  const getServices = async (search?: string) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      let c = await GetAllRoutes(search ?? "");
-      setData(c);
+      let s = await GetAllServices(search ?? "");
+      setData(s);
       setSuccess(true);
     } catch (error) {
       setSuccess(false);
@@ -36,36 +34,35 @@ export const useGetAllRoutes = () => {
   };
 
   useEffect(() => {
-    getRoutes();
+    getServices();
   }, [reload]);
 
   return {
     loading,
     success,
     data,
-    getRoutes,
+    getServices,
   };
 };
 
-export const useGetRouteByID = () => {
-  const [data, setData] = useState<route.Route>(
-    route.Route.createFrom({
-      controllerID: "",
-      data: [],
+export const useGetServiceByID = () => {
+  const [data, setData] = useState<service.Service>(
+    service.Service.createFrom({
       description: "",
       id: "",
       name: "",
+      data: [],
     })
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
 
-  const getRoute = async (id: string) => {
+  const getService = async (id: string) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      let c = await GetRouteByID(id);
+      let c = await GetServiceByID(id);
       setData(c);
       setSuccess(true);
     } catch (error) {
@@ -80,22 +77,22 @@ export const useGetRouteByID = () => {
     loading,
     success,
     data,
-    getRoute,
+    getService,
   };
 };
 
-export const useDeleteRouteByID = () => {
+export const useDeleteServiceByID = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
 
-  const deleteRoute = async (id: string) => {
+  const deleteService = async (id: string) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      await DeleteRouteByID(id);
+      await DeleteServiceByID(id);
       setSuccess(true);
-      toast.success("Route Deleted");
+      toast.success("Service Deleted");
     } catch (error) {
       setSuccess(false);
       toast.error(`${error}`);
@@ -107,22 +104,22 @@ export const useDeleteRouteByID = () => {
   return {
     loading,
     success,
-    deleteRoute,
+    deleteService,
   };
 };
 
-export const useCreateRoute = () => {
+export const useCreateService = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
 
-  const createRoute = async (payload: route.CreateRoutePayload) => {
+  const createService = async (payload: service.CreateServicePayload) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      await CreateRoute(payload);
+      await CreateService(payload);
       setSuccess(true);
-      toast.success("Route Created");
+      toast.success("Service Created");
     } catch (error) {
       setSuccess(false);
       toast.error(`${error}`);
@@ -134,34 +131,29 @@ export const useCreateRoute = () => {
   return {
     loading,
     success,
-    createRoute,
+    createService,
   };
 };
 
-export const useModifyRouteData = () => {
+export const useUpdateService = (showToast?: boolean) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
 
-  const modifyMethod = async (
-    payload: route.ModifyRouteDataPayload,
-    mode: "add" | "remove" | "rename"
-  ) => {
+  const updateService = async (payload: service.UpdateServicePayload) => {
     if (loading) return;
     setLoading(true);
 
     try {
-      if (mode === "add") {
-        await AddRouteData(payload);
-      } else if (mode === "remove") {
-        await RemoveRouteData(payload);
-      } else if (mode === "rename") {
-        await UpdateRouteData(payload);
+      await UpdateService(payload);
+      setSuccess(true);
+      if (showToast && showToast) {
+        toast.success("Service Updated");
       }
-
-      setSuccess(true);
     } catch (error) {
       setSuccess(false);
-      toast.error(`${error}`);
+      if (showToast && showToast) {
+        toast.error(`${error}`);
+      }
     }
 
     setLoading(false);
@@ -170,6 +162,6 @@ export const useModifyRouteData = () => {
   return {
     loading,
     success,
-    modifyMethod,
+    updateService,
   };
 };

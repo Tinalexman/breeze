@@ -6,6 +6,10 @@ export function AddControllerMethod(arg1) {
   return window['go']['core']['App']['AddControllerMethod'](arg1);
 }
 
+export function AddRouteData(arg1) {
+  return window['go']['core']['App']['AddRouteData'](arg1);
+}
+
 export function CreateController(arg1) {
   return window['go']['core']['App']['CreateController'](arg1);
 }
@@ -22,6 +26,10 @@ export function CreateRoute(arg1) {
   return window['go']['core']['App']['CreateRoute'](arg1);
 }
 
+export function CreateService(arg1) {
+  return window['go']['core']['App']['CreateService'](arg1);
+}
+
 export function DeleteControllerByID(arg1) {
   return window['go']['core']['App']['DeleteControllerByID'](arg1);
 }
@@ -34,6 +42,10 @@ export function DeleteRouteByID(arg1) {
   return window['go']['core']['App']['DeleteRouteByID'](arg1);
 }
 
+export function DeleteServiceByID(arg1) {
+  return window['go']['core']['App']['DeleteServiceByID'](arg1);
+}
+
 export function GetAllControllers(arg1) {
   return window['go']['core']['App']['GetAllControllers'](arg1);
 }
@@ -44,6 +56,10 @@ export function GetAllModels(arg1) {
 
 export function GetAllRoutes(arg1) {
   return window['go']['core']['App']['GetAllRoutes'](arg1);
+}
+
+export function GetAllServices(arg1) {
+  return window['go']['core']['App']['GetAllServices'](arg1);
 }
 
 export function GetControllerByID(arg1) {
@@ -66,6 +82,10 @@ export function GetRouteByID(arg1) {
   return window['go']['core']['App']['GetRouteByID'](arg1);
 }
 
+export function GetServiceByID(arg1) {
+  return window['go']['core']['App']['GetServiceByID'](arg1);
+}
+
 export function Load() {
   return window['go']['core']['App']['Load']();
 }
@@ -76,6 +96,10 @@ export function LoadProject(arg1) {
 
 export function RemoveControllerMethod(arg1) {
   return window['go']['core']['App']['RemoveControllerMethod'](arg1);
+}
+
+export function RemoveRouteData(arg1) {
+  return window['go']['core']['App']['RemoveRouteData'](arg1);
 }
 
 export function RenameControllerMethod(arg1) {
@@ -104,4 +128,12 @@ export function UpdateController(arg1) {
 
 export function UpdateModel(arg1) {
   return window['go']['core']['App']['UpdateModel'](arg1);
+}
+
+export function UpdateRouteData(arg1) {
+  return window['go']['core']['App']['UpdateRouteData'](arg1);
+}
+
+export function UpdateService(arg1) {
+  return window['go']['core']['App']['UpdateService'](arg1);
 }
