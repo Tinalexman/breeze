@@ -4,6 +4,7 @@ import {
   CreateController,
   GetControllerByID,
   DeleteControllerByID,
+  UpdateController,
 } from "../../wailsjs/go/core/App";
 import { controller } from "../../wailsjs/go/models";
 import toast from "react-hot-toast";
@@ -132,5 +133,38 @@ export const useCreateController = () => {
     loading,
     success,
     createController,
+  };
+};
+
+export const useUpdateController = (showToast?: boolean) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+
+  const updateController = async (
+    payload: controller.UpdateControllerPayload
+  ) => {
+    if (loading) return;
+    setLoading(true);
+
+    try {
+      await UpdateController(payload);
+      setSuccess(true);
+      if (showToast && showToast) {
+        toast.success("Controller Updated");
+      }
+    } catch (error) {
+      setSuccess(false);
+      if (showToast && showToast) {
+        toast.error(`${error}`);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  return {
+    loading,
+    success,
+    updateController,
   };
 };

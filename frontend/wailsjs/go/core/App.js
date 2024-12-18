@@ -82,6 +82,10 @@ export function SaveProject(arg1) {
   return window['go']['core']['App']['SaveProject'](arg1);
 }
 
+export function UpdateController(arg1) {
+  return window['go']['core']['App']['UpdateController'](arg1);
+}
+
 export function UpdateModel(arg1) {
   return window['go']['core']['App']['UpdateModel'](arg1);
 }

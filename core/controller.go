@@ -26,6 +26,14 @@ func (a *App) CreateController(payload controller.CreateControllerPayload) error
 	return err
 }
 
+func (a *App) UpdateController(payload controller.UpdateControllerPayload) error {
+	err := controller.UpdateController(payload)
+	if err == nil {
+		a.SaveCurrentProject()
+	}
+	return err
+}
+
 func (a *App) DeleteControllerByID(id string) error {
 	err := controller.DeleteControllerByID(id)
 	if err == nil {

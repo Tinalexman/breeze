@@ -36,6 +36,26 @@ export namespace controller {
 	        this.modelID = source["modelID"];
 	    }
 	}
+	export class UpdateControllerPayload {
+	    id: string;
+	    name: string;
+	    description: string;
+	    modelID: string;
+	    handlers: any[];
+	
+	    static createFrom(source: any = {}) {
+	        return new UpdateControllerPayload(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = source["name"];
+	        this.description = source["description"];
+	        this.modelID = source["modelID"];
+	        this.handlers = source["handlers"];
+	    }
+	}
 
 }
 

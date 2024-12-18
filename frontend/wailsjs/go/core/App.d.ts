@@ -45,4 +45,6 @@ export function SaveCurrentProject():Promise<void>;
 
 export function SaveProject(arg1:string):Promise<void>;
 
+export function UpdateController(arg1:controller.UpdateControllerPayload):Promise<void>;
+
 export function UpdateModel(arg1:model.UpdateModelPayload):Promise<void>;

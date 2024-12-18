@@ -9,6 +9,7 @@ import EmptyState from "../reusable/EmptyState";
 import ItemContainer from "../reusable/ItemContainer";
 import GroupRevealer from "../reusable/GroupRevealer";
 import Reveal from "../reusable/Reveal";
+import ViewController from "./ViewController";
 
 const Controllers = () => {
   const [addController, showAddController] = useState<boolean>(false);
@@ -75,6 +76,9 @@ const Controllers = () => {
                       name={controller.name}
                       description={controller.description}
                       icon={getIconForId(controller.id)}
+                      onClick={() => {
+                        setIndexOfSelectedController(i);
+                      }}
                     />
                   );
                 })}
@@ -91,7 +95,12 @@ const Controllers = () => {
             )}
           </>
         }
-        secondChild={<> </>}
+        secondChild={
+          <ViewController
+            breezeController={data[indexOfSelectedController]}
+            onExit={() => setIndexOfSelectedController(-1)}
+          />
+        }
       />
       <Modal
         visible={addController}

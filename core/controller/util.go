@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"breeze/core/model"
 	"breeze/core/network"
 	"breeze/core/util"
 	"fmt"
@@ -11,6 +12,14 @@ type CreateControllerPayload struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	ModelID     string `json:"modelID"`
+}
+
+type UpdateControllerPayload struct {
+	ID          string            `json:"id"`
+	Name        string            `json:"name"`
+	Description string            `json:"description"`
+	ModelID     string            `json:"modelID"`
+	Handlers    []network.Handler `json:"handlers"`
 }
 
 func GetAllControllers(search string) []Controller {
@@ -54,6 +63,27 @@ func CreateNewController(payload CreateControllerPayload) error {
 
 	AllControllers = append(AllControllers, c)
 	return nil
+}
+
+func UpdateController(data UpdateControllerPayload) error {
+	_, err := model.GetModelByID(data.ModelID)
+	if err != nil {
+		return err
+	}
+
+	for i, m := range AllControllers {
+		if m.ID == data.ID {
+			AllControllers[i] = Controller{
+				Name:        data.Name,
+				ID:          data.ID,
+				Description: data.Description,
+				Handlers:    data.Handlers,
+			}
+			return nil
+		}
+	}
+
+	return fmt.Errorf("Controller with ID '%s' does not exist", data.ID)
 }
 
 func DeleteControllerByID(id string) error {
