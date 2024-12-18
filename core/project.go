@@ -61,3 +61,12 @@ func (a *App) SaveCurrentProject() {
 		go a.SaveProject(projectName)
 	}
 }
+
+func (a *App) SaveTarget(target string) error {
+	if len(a.RecentProjects) > 0 {
+		p := a.RecentProjects[0]
+		go p.Save(target)
+	}
+
+	return nil
+}

@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import CloseButton from "../reusable/CloseButton";
 import { useGetRecentProjects, useOpenProject } from "../../hooks/appHooks";
 import Loader from "../reusable/Loader";
-import Dropdown from "../reusable/Dropdown";
+import Dropdown from "../reusable/input/Dropdown";
 
 const OpenProject: FC<{ onOpen: () => void; onClose: () => void }> = ({
   onOpen,

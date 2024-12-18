@@ -5,6 +5,8 @@ import {model} from '../models';
 import {project} from '../models';
 import {route} from '../models';
 
+export function AddControllerMethod(arg1:controller.ModifyControllerMethodPayload):Promise<void>;
+
 export function CreateController(arg1:controller.CreateControllerPayload):Promise<void>;
 
 export function CreateModel(arg1:model.CreateModelPayload):Promise<void>;
@@ -39,11 +41,15 @@ export function Load():Promise<void>;
 
 export function LoadProject(arg1:string):Promise<void>;
 
+export function RemoveControllerMethod(arg1:controller.ModifyControllerMethodPayload):Promise<void>;
+
 export function Save():Promise<void>;
 
 export function SaveCurrentProject():Promise<void>;
 
 export function SaveProject(arg1:string):Promise<void>;
+
+export function SaveTarget(arg1:string):Promise<void>;
 
 export function UpdateController(arg1:controller.UpdateControllerPayload):Promise<void>;
 

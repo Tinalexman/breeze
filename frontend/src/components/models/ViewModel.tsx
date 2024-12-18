@@ -11,15 +11,15 @@ import {
 } from "../../hooks/modelHooks";
 import { useGlobalData } from "../../stores/global";
 import AddNewComponent from "../reusable/AddNewComponent";
-import AddModelDataField from "../reusable/AddModelDataField";
 import { IoIosAdd } from "react-icons/io";
+import AddMetadata from "./AddMetadata";
 
-const ViewModel: FC<{ breezeModel?: m.Model; onExit: () => void }> = ({
-  breezeModel,
+const ViewModel: FC<{ initial?: m.Model; onExit: () => void }> = ({
+  initial,
   onExit,
 }) => {
-  if (breezeModel === undefined) return null;
-  const [model, setModel] = useState<m.Model>(breezeModel);
+  if (initial === undefined) return null;
+  const [model, setModel] = useState<m.Model>(initial);
   const reload = useGlobalData((state) => state.reloadCurrentPage);
 
   const {
@@ -50,7 +50,7 @@ const ViewModel: FC<{ breezeModel?: m.Model; onExit: () => void }> = ({
   }, [loadingUpdate, updateSuccess]);
 
   const { getIconForId } = useGetUniqueIcon();
-  const Icon = getIconForId(breezeModel.id);
+  const Icon = getIconForId(model.id);
 
   const update = (m: m.Model) => {
     setModel(m);
@@ -120,7 +120,7 @@ const ViewModel: FC<{ breezeModel?: m.Model; onExit: () => void }> = ({
 
         {!hasMetaData && (
           <AddNewComponent
-            text="Add new fields to your model"
+            text="Add fields to your model"
             onClick={() => {
               update(
                 m.Model.createFrom({
@@ -144,7 +144,7 @@ const ViewModel: FC<{ breezeModel?: m.Model; onExit: () => void }> = ({
           <div className="w-full grid grid-cols-4 gap-4">
             {model.metadata.map((v, i) => {
               return (
-                <AddModelDataField
+                <AddMetadata
                   key={i}
                   initial={v}
                   allTypes={modelTypes}

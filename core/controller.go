@@ -2,6 +2,7 @@ package core
 
 import (
 	"breeze/core/controller"
+	"breeze/core/global"
 	// "breeze/core/util"
 )
 
@@ -21,7 +22,7 @@ func (a *App) GetControllerByID(id string) (controller.Controller, error) {
 func (a *App) CreateController(payload controller.CreateControllerPayload) error {
 	err := controller.CreateNewController(payload)
 	if err == nil {
-		a.SaveCurrentProject()
+		a.SaveTarget(global.CONTROLLER_FILE_NAME)
 	}
 	return err
 }
@@ -29,7 +30,23 @@ func (a *App) CreateController(payload controller.CreateControllerPayload) error
 func (a *App) UpdateController(payload controller.UpdateControllerPayload) error {
 	err := controller.UpdateController(payload)
 	if err == nil {
-		a.SaveCurrentProject()
+		a.SaveTarget(global.CONTROLLER_FILE_NAME)
+	}
+	return err
+}
+
+func (a *App) AddControllerMethod(payload controller.ModifyControllerMethodPayload) error {
+	err := controller.AddControllerMethod(payload)
+	if err == nil {
+		a.SaveTarget(global.CONTROLLER_FILE_NAME)
+	}
+	return err
+}
+
+func (a *App) RemoveControllerMethod(payload controller.ModifyControllerMethodPayload) error {
+	err := controller.RemoveControllerMethod(payload)
+	if err == nil {
+		a.SaveTarget(global.CONTROLLER_FILE_NAME)
 	}
 	return err
 }
@@ -37,7 +54,7 @@ func (a *App) UpdateController(payload controller.UpdateControllerPayload) error
 func (a *App) DeleteControllerByID(id string) error {
 	err := controller.DeleteControllerByID(id)
 	if err == nil {
-		a.SaveCurrentProject()
+		a.SaveTarget(global.CONTROLLER_FILE_NAME)
 	}
 	return err
 }

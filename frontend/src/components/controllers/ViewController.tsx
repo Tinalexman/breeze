@@ -1,22 +1,26 @@
 import { FC, useEffect, useState } from "react";
-import { model as m, controller as c } from "../../../wailsjs/go/models";
+import { controller as c } from "../../../wailsjs/go/models";
 import CloseButton from "../reusable/CloseButton";
 import { useGetUniqueIcon } from "../../hooks/miscHooks";
 import HoverIcon from "../reusable/HoverIcon";
 import { IoTrash } from "react-icons/io5";
 import {
   useDeleteControllerByID,
+  useGetControllerByID,
+  useModifyControllerMethod,
   useUpdateController,
 } from "../../hooks/controllerHooks";
 import { useGlobalData } from "../../stores/global";
 import { IoIosAdd } from "react-icons/io";
+import AddNewComponent from "../reusable/AddNewComponent";
+import AddMethod from "./AddMethod";
 
 const ViewController: FC<{
-  breezeController?: c.Controller;
+  initial?: c.Controller;
   onExit: () => void;
-}> = ({ breezeController, onExit }) => {
-  if (breezeController === undefined) return null;
-  const [controller, setController] = useState<c.Controller>(breezeController);
+}> = ({ initial, onExit }) => {
+  if (initial === undefined) return null;
+  const [controller, setController] = useState<c.Controller>(initial);
   const reload = useGlobalData((state) => state.reloadCurrentPage);
 
   const {
@@ -26,10 +30,23 @@ const ViewController: FC<{
   } = useDeleteControllerByID();
 
   const {
+    data,
+    getController,
+    loading: loadingGet,
+    success: getSuccess,
+  } = useGetControllerByID();
+
+  const {
     loading: loadingUpdate,
     success: updateSuccess,
     updateController,
   } = useUpdateController(false);
+
+  const {
+    loading: loadingModify,
+    success: modifySuccess,
+    modifyMethod,
+  } = useModifyControllerMethod(true);
 
   useEffect(() => {
     if (!loadingDelete && deleteSuccess) {
@@ -44,15 +61,23 @@ const ViewController: FC<{
     }
   }, [loadingUpdate, updateSuccess]);
 
+  useEffect(() => {
+    if (!loadingModify && modifySuccess) {
+      getController(controller.id);
+      reload();
+    }
+  }, [loadingModify, modifySuccess]);
+
+  useEffect(() => {
+    if (!loadingGet && getSuccess) {
+      setController(data);
+    }
+  }, [loadingGet, getSuccess]);
+
   const { getIconForId } = useGetUniqueIcon();
-  const Icon = getIconForId(breezeController.id);
+  const Icon = getIconForId(controller.id);
 
-  const update = (c: c.Controller) => {
-    setController(c);
-    updateController(c);
-  };
-
-  let hasMetaData: boolean = true;
+  let hasMethods: boolean = controller.methods.length > 0;
 
   return (
     <div className="w-full flex flex-col gap-10 bg-sh-1 rounded-2xl p-5">
@@ -84,14 +109,73 @@ const ViewController: FC<{
       </div>
       <div className="w-full flex flex-col gap-4">
         <div className="w-fit items-center flex gap-2 text-white">
-          <h2 className="text-lg font-medium text-opacity-80">Handlers</h2>
-          <IoIosAdd
-            className="cursor-pointer"
-            title="Add a new handler"
-            size={24}
-            onClick={() => {}}
-          />
+          <h2 className="text-lg font-medium text-opacity-80">Methods</h2>
+          {hasMethods && (
+            <IoIosAdd
+              className="cursor-pointer"
+              title="Add a new method"
+              size={24}
+              onClick={() =>
+                modifyMethod(
+                  {
+                    id: controller.id,
+                    method: "New Method",
+                  },
+                  "add"
+                )
+              }
+            />
+          )}
         </div>
+        {!hasMethods && (
+          <AddNewComponent
+            text="Add methods to your controller"
+            onClick={() =>
+              modifyMethod(
+                {
+                  id: controller.id,
+                  method: "New Method",
+                },
+                "add"
+              )
+            }
+          />
+        )}
+        {hasMethods && (
+          <div className="w-full grid grid-cols-4 gap-4">
+            {controller.methods.map((v, i) => {
+              return (
+                <AddMethod
+                  key={i}
+                  initial={v}
+                  index={i + 1}
+                  placeholder="Enter Method Name"
+                  onRemove={() =>
+                    modifyMethod(
+                      {
+                        id: controller.id,
+                        method: v,
+                      },
+                      "remove"
+                    )
+                  }
+                  onChange={(res) => {
+                    // const methods = controller.methods;
+                    // methods[i] = res;
+                    // update(
+                    //   c.Controller.createFrom({
+                    //     id: controller.id,
+                    //     name: controller.name,
+                    //     description: controller.description,
+                    //     methods: methods,
+                    //   })
+                    // );
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

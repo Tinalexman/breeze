@@ -97,7 +97,7 @@ const Controllers = () => {
         }
         secondChild={
           <ViewController
-            breezeController={data[indexOfSelectedController]}
+            initial={data[indexOfSelectedController]}
             onExit={() => setIndexOfSelectedController(-1)}
           />
         }

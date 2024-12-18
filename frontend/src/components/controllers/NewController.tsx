@@ -3,7 +3,7 @@ import CloseButton from "../reusable/CloseButton";
 
 import { Form, Formik } from "formik";
 import LabeledInput from "../reusable/LabeledInput";
-import Dropdown from "../reusable/Dropdown";
+import Dropdown from "../reusable/input/Dropdown";
 import { useGetAllModels } from "../../hooks/modelHooks";
 import Loader from "../reusable/Loader";
 import { useCreateController } from "../../hooks/controllerHooks";

@@ -1,9 +1,10 @@
 import { FC, useState } from "react";
 import { model } from "../../../wailsjs/go/models";
 import { IoClose } from "react-icons/io5";
-import FieldDropdown from "./FieldDropdown";
+import FieldDropdown from "../reusable/input/FieldDropdown";
+import FieldInput from "../reusable/input/FieldInput";
 
-const AddModelDataField: FC<{
+const AddMetadata: FC<{
   initial: model.ModelData;
   allTypes: string[];
   onRemove: () => void;
@@ -20,20 +21,16 @@ const AddModelDataField: FC<{
         size={14}
         onClick={onRemove}
       />
-      <div className="w-full flex flex-col items-start gap-0.5">
-        <p className="text-xs text-sh-4">Field Name</p>
-        <input
-          type="text"
-          className="outline-none w-full rounded text-sm p-2 focus:outline-none focus:bg-sh-3 bg-sh-1 bg-opacity-60 text-white transition-all ease-out duration-200"
-          value={name}
-          placeholder="Enter Field Name"
-          onChange={(e) => {
-            const res = e.target.value;
-            setName(res);
-            onChange(res, type, def);
-          }}
-        />
-      </div>
+      <FieldInput
+        label="Field Name"
+        placeholder="Enter Field Name"
+        value={name}
+        onChange={(e) => {
+          const res = e.target.value;
+          setName(res);
+          onChange(res, type, def);
+        }}
+      />
       <FieldDropdown
         hint="Select Model Type"
         menus={allTypes.map((t, _) => {
@@ -52,4 +49,4 @@ const AddModelDataField: FC<{
   );
 };
 
-export default AddModelDataField;
+export default AddMetadata;

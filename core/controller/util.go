@@ -2,7 +2,6 @@ package controller
 
 import (
 	"breeze/core/model"
-	"breeze/core/network"
 	"breeze/core/util"
 	"fmt"
 	"strings"
@@ -15,11 +14,15 @@ type CreateControllerPayload struct {
 }
 
 type UpdateControllerPayload struct {
-	ID          string            `json:"id"`
-	Name        string            `json:"name"`
-	Description string            `json:"description"`
-	ModelID     string            `json:"modelID"`
-	Handlers    []network.Handler `json:"handlers"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	ModelID     string `json:"modelID"`
+}
+
+type ModifyControllerMethodPayload struct {
+	ID     string `json:"id"`
+	Method string `json:"method"`
 }
 
 func GetAllControllers(search string) []Controller {
@@ -53,12 +56,17 @@ func CreateNewController(payload CreateControllerPayload) error {
 		}
 	}
 
+	m, err := model.GetModelByID(payload.ModelID)
+	if err != nil {
+		return err
+	}
+
 	c := Controller{
 		Name:        payload.Name,
 		ModelID:     payload.ModelID,
 		Description: util.Ternary(payload.Description, "No Description Provided", len(payload.Description) > 0).(string),
 		ID:          util.GetHash(payload.Name),
-		Handlers:    make([]network.Handler, 0),
+		Methods:     generateDefaultMethods(m.Name),
 	}
 
 	AllControllers = append(AllControllers, c)
@@ -73,11 +81,12 @@ func UpdateController(data UpdateControllerPayload) error {
 
 	for i, m := range AllControllers {
 		if m.ID == data.ID {
+			methods := m.Methods
 			AllControllers[i] = Controller{
 				Name:        data.Name,
 				ID:          data.ID,
 				Description: data.Description,
-				Handlers:    data.Handlers,
+				Methods:     methods,
 			}
 			return nil
 		}
@@ -94,4 +103,87 @@ func DeleteControllerByID(id string) error {
 		}
 	}
 	return fmt.Errorf("Controller with ID '%s' does not exists", id)
+}
+
+func GetControllerMethods(id string) ([]string, error) {
+	c, err := GetControllerByID(id)
+	if err != nil {
+		return []string{}, err
+	}
+
+	return c.Methods, nil
+}
+
+// Generate default methods, custom methods can be added using the builder
+
+func generateDefaultMethods(name string) []string {
+	return []string{
+		fmt.Sprintf("getAll%ss", name),
+		fmt.Sprintf("get%sByID", name),
+		fmt.Sprintf("create%s", name),
+		fmt.Sprintf("update%sByID", name),
+		fmt.Sprintf("delete%sByID", name),
+		fmt.Sprintf("deleteAll%ss", name),
+	}
+}
+
+func AddControllerMethod(payload ModifyControllerMethodPayload) error {
+
+	controllerIndex := -1
+
+	for i, m := range AllControllers {
+		if m.ID == payload.ID {
+			controllerIndex = i
+		}
+	}
+
+	if controllerIndex == -1 {
+		return fmt.Errorf("Controller with ID '%s' does not exist", payload.ID)
+	}
+
+	methodIndex := -1
+	for i, m := range AllControllers[controllerIndex].Methods {
+		if m == payload.Method {
+			methodIndex = i
+			break
+		}
+	}
+
+	if methodIndex != -1 {
+		return fmt.Errorf("Method '%s' already exists", payload.Method)
+	}
+
+	AllControllers[controllerIndex].Methods = append(AllControllers[controllerIndex].Methods, payload.Method)
+	return nil
+}
+
+func RemoveControllerMethod(payload ModifyControllerMethodPayload) error {
+	controllerIndex := -1
+
+	for i, m := range AllControllers {
+		if m.ID == payload.ID {
+			controllerIndex = i
+		}
+	}
+
+	if controllerIndex == -1 {
+		return fmt.Errorf("Controller with ID '%s' does not exist", payload.ID)
+	}
+
+	methodIndex := -1
+	for i, m := range AllControllers[controllerIndex].Methods {
+		if m == payload.Method {
+			methodIndex = i
+			break
+		}
+	}
+
+	if methodIndex == -1 {
+		return fmt.Errorf("Method '%s' does not exist", payload.Method)
+	}
+
+	methods := AllControllers[controllerIndex].Methods
+
+	AllControllers[controllerIndex].Methods = append(methods[:methodIndex], methods[methodIndex+1:]...)
+	return nil
 }

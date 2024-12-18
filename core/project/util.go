@@ -3,9 +3,11 @@ package project
 import (
 	"breeze/core/controller"
 	"breeze/core/files"
+	"breeze/core/global"
 	"breeze/core/model"
 	"breeze/core/route"
 	"encoding/json"
+	"fmt"
 )
 
 type modelData struct {
@@ -30,29 +32,19 @@ func (p *Project) CreateNewProject(payload CreateNewProjectPayload) error {
 		return err
 	}
 
-	err = createSingleFileAndWriteDefault(files.GetFullPath(payload.Name, "models.json"), "models")
-	if err != nil {
-		return err
+	filesToCreate := []string{
+		global.GLOBALS_FILE_NAME,
+		global.MIDDLEWARE_FILE_NAME,
+		global.CONTROLLER_FILE_NAME,
+		global.ROUTE_FILE_NAME,
+		global.MODEL_FILE_NAME,
 	}
 
-	err = createSingleFileAndWriteDefault(files.GetFullPath(payload.Name, "controllers.json"), "controllers")
-	if err != nil {
-		return err
-	}
-
-	err = createSingleFileAndWriteDefault(files.GetFullPath(payload.Name, "routes.json"), "routes")
-	if err != nil {
-		return err
-	}
-
-	err = createSingleFileAndWriteDefault(files.GetFullPath(payload.Name, "middlewares.json"), "middlewares")
-	if err != nil {
-		return err
-	}
-
-	err = createSingleFileAndWriteDefault(files.GetFullPath(payload.Name, "globals.json"), "globals")
-	if err != nil {
-		return err
+	for _, f := range filesToCreate {
+		err = createSingleFileAndWriteDefault(files.GetFullPath(payload.Name, fmt.Sprintf("%s.json", f)), f)
+		if err != nil {
+			return err
+		}
 	}
 
 	p.Name = payload.Name
@@ -98,7 +90,7 @@ func createProjectData(directory string, data *Project) error {
 
 func (p *Project) LoadProject() error {
 	// LOAD MODELS
-	modelByteData, err := loadSingleFile(p.Name, "models")
+	modelByteData, err := loadSingleFile(p.Name, global.MODEL_FILE_NAME)
 	if err != nil {
 		return err
 	}
@@ -112,7 +104,7 @@ func (p *Project) LoadProject() error {
 	model.AllModels = m.Models
 
 	// LOAD CONTROLLERS
-	controllerByteData, err := loadSingleFile(p.Name, "controllers")
+	controllerByteData, err := loadSingleFile(p.Name, global.CONTROLLER_FILE_NAME)
 	if err != nil {
 		return err
 	}
@@ -126,7 +118,7 @@ func (p *Project) LoadProject() error {
 	controller.AllControllers = c.Controllers
 
 	// LOAD CONTROLLERS
-	routeByteData, err := loadSingleFile(p.Name, "routes")
+	routeByteData, err := loadSingleFile(p.Name, global.ROUTE_FILE_NAME)
 	if err != nil {
 		return err
 	}
@@ -143,21 +135,37 @@ func (p *Project) LoadProject() error {
 }
 
 func (p *Project) SaveProject() error {
-	// SAVE CONTROLLERS
-	var controllerData controllerData
-	controllerData.Controllers = controller.AllControllers
-
-	controllerByteData, err := json.MarshalIndent(controllerData, "", "  ")
+	err := p.saveModels()
 	if err != nil {
 		return err
 	}
 
-	err = writeSingleFile(p.Name, "controllers", controllerByteData)
+	err = p.saveControllers()
 	if err != nil {
 		return err
 	}
 
-	// SAVE MODELS
+	err = p.saveRoutes()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *Project) Save(target string) error {
+	if target == global.CONTROLLER_FILE_NAME {
+		return p.saveControllers()
+	} else if target == global.MODEL_FILE_NAME {
+		return p.saveModels()
+	} else if target == global.ROUTE_FILE_NAME {
+		return p.saveRoutes()
+	}
+
+	return nil
+}
+
+func (p *Project) saveModels() error {
 	var modelData modelData
 	modelData.Models = model.AllModels
 
@@ -166,12 +174,24 @@ func (p *Project) SaveProject() error {
 		return err
 	}
 
-	err = writeSingleFile(p.Name, "models", modelByteData)
+	err = writeSingleFile(p.Name, global.MODEL_FILE_NAME, modelByteData)
+	return err
+}
+
+func (p *Project) saveControllers() error {
+	var controllerData controllerData
+	controllerData.Controllers = controller.AllControllers
+
+	controllerByteData, err := json.MarshalIndent(controllerData, "", "  ")
 	if err != nil {
 		return err
 	}
 
-	// SAVE ROUTES
+	err = writeSingleFile(p.Name, global.CONTROLLER_FILE_NAME, controllerByteData)
+	return err
+}
+
+func (p *Project) saveRoutes() error {
 	var routeData routeData
 	routeData.Routes = route.AllRoutes
 
@@ -180,10 +200,6 @@ func (p *Project) SaveProject() error {
 		return err
 	}
 
-	err = writeSingleFile(p.Name, "routes", routeByteData)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	err = writeSingleFile(p.Name, global.ROUTE_FILE_NAME, routeByteData)
+	return err
 }

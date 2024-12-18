@@ -106,7 +106,7 @@ const Models = () => {
         }
         secondChild={
           <ViewModel
-            breezeModel={data[indexOfSelectedModel]}
+            initial={data[indexOfSelectedModel]}
             onExit={() => setIndexOfSelectedModel(-1)}
           />
         }

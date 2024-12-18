@@ -1,6 +1,7 @@
 package core
 
 import (
+	"breeze/core/global"
 	"breeze/core/model"
 	// "breeze/core/util"
 )
@@ -24,7 +25,7 @@ func (a *App) GetModelByID(id string) (model.Model, error) {
 func (a *App) CreateModel(payload model.CreateModelPayload) error {
 	err := model.CreateNewModel(payload)
 	if err == nil {
-		a.SaveCurrentProject()
+		a.SaveTarget(global.MODEL_FILE_NAME)
 	}
 
 	return err
@@ -33,7 +34,7 @@ func (a *App) CreateModel(payload model.CreateModelPayload) error {
 func (a *App) UpdateModel(payload model.UpdateModelPayload) error {
 	err := model.UpdateModel(payload)
 	if err == nil {
-		a.SaveCurrentProject()
+		a.SaveTarget(global.MODEL_FILE_NAME)
 	}
 	return err
 }
@@ -41,7 +42,7 @@ func (a *App) UpdateModel(payload model.UpdateModelPayload) error {
 func (a *App) DeleteModelByID(id string) error {
 	err := model.DeleteModelByID(id)
 	if err == nil {
-		a.SaveCurrentProject()
+		a.SaveTarget(global.MODEL_FILE_NAME)
 	}
 	return err
 }
