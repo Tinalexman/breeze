@@ -14,15 +14,15 @@ type CreateControllerPayload struct {
 }
 
 type UpdateControllerPayload struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	ModelID     string `json:"modelID"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	ControllerID string `json:"id"`
+	ModelID      string `json:"modelID"`
 }
 
 type ModifyControllerMethodPayload struct {
-	ID     string `json:"id"`
-	Method string `json:"method"`
+	ControllerID string `json:"id"`
+	Method       string `json:"method"`
 }
 
 func GetAllControllers(search string) []Controller {
@@ -80,11 +80,11 @@ func UpdateController(data UpdateControllerPayload) error {
 	}
 
 	for i, m := range AllControllers {
-		if m.ID == data.ID {
+		if m.ID == data.ControllerID {
 			methods := m.Methods
 			AllControllers[i] = Controller{
 				Name:        data.Name,
-				ID:          data.ID,
+				ID:          data.ControllerID,
 				Description: data.Description,
 				Methods:     methods,
 			}
@@ -92,7 +92,7 @@ func UpdateController(data UpdateControllerPayload) error {
 		}
 	}
 
-	return fmt.Errorf("Controller with ID '%s' does not exist", data.ID)
+	return fmt.Errorf("Controller with ID '%s' does not exist", data.ControllerID)
 }
 
 func DeleteControllerByID(id string) error {
@@ -132,13 +132,13 @@ func AddControllerMethod(payload ModifyControllerMethodPayload) error {
 	controllerIndex := -1
 
 	for i, m := range AllControllers {
-		if m.ID == payload.ID {
+		if m.ID == payload.ControllerID {
 			controllerIndex = i
 		}
 	}
 
 	if controllerIndex == -1 {
-		return fmt.Errorf("Controller with ID '%s' does not exist", payload.ID)
+		return fmt.Errorf("Controller with ID '%s' does not exist", payload.ControllerID)
 	}
 
 	methodIndex := -1
@@ -161,13 +161,13 @@ func RemoveControllerMethod(payload ModifyControllerMethodPayload) error {
 	controllerIndex := -1
 
 	for i, m := range AllControllers {
-		if m.ID == payload.ID {
+		if m.ID == payload.ControllerID {
 			controllerIndex = i
 		}
 	}
 
 	if controllerIndex == -1 {
-		return fmt.Errorf("Controller with ID '%s' does not exist", payload.ID)
+		return fmt.Errorf("Controller with ID '%s' does not exist", payload.ControllerID)
 	}
 
 	methodIndex := -1
@@ -185,5 +185,36 @@ func RemoveControllerMethod(payload ModifyControllerMethodPayload) error {
 	methods := AllControllers[controllerIndex].Methods
 
 	AllControllers[controllerIndex].Methods = append(methods[:methodIndex], methods[methodIndex+1:]...)
+	return nil
+}
+
+func RenameControllerMethod(payload ModifyControllerMethodPayload) error {
+	controllerIndex := -1
+
+	for i, m := range AllControllers {
+		if m.ID == payload.ControllerID {
+			controllerIndex = i
+		}
+	}
+
+	if controllerIndex == -1 {
+		return fmt.Errorf("Controller with ID '%s' does not exist", payload.ControllerID)
+	}
+
+	methodIndex := -1
+	for i, m := range AllControllers[controllerIndex].Methods {
+		if m == payload.Method {
+			methodIndex = i
+			break
+		}
+	}
+
+	if methodIndex != -1 {
+		return fmt.Errorf("Method '%s' already exists", payload.Method)
+	}
+
+	methods := AllControllers[controllerIndex].Methods
+	AllControllers[controllerIndex].Methods = append(methods[:methodIndex], payload.Method)
+	AllControllers[controllerIndex].Methods = append(AllControllers[controllerIndex].Methods, methods[methodIndex+1:]...)
 	return nil
 }

@@ -19,8 +19,9 @@ type ResponseBody struct {
 	Message    string      `json:"message"`
 }
 
-type Handler interface {
-	Process(request Request) (Response, bool)
+type HandlerData struct {
+	ID   string                 `json:"id"`
+	Data map[string]interface{} `json:"steps"`
 }
 
 func (r *ResponseBody) Error(message string, code int) {

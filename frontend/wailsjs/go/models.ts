@@ -51,9 +51,9 @@ export namespace controller {
 	    }
 	}
 	export class UpdateControllerPayload {
-	    id: string;
 	    name: string;
 	    description: string;
+	    id: string;
 	    modelID: string;
 	
 	    static createFrom(source: any = {}) {
@@ -62,9 +62,9 @@ export namespace controller {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.id = source["id"];
 	        this.name = source["name"];
 	        this.description = source["description"];
+	        this.id = source["id"];
 	        this.modelID = source["modelID"];
 	    }
 	}

@@ -7,9 +7,14 @@ import (
 )
 
 type CreateRoutePayload struct {
-	Name         string `json:"name"`
-	Description  string `json:"description"`
-	ControllerID string `json:"controllerID"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	ServiceID   string `json:"serviceID"`
+}
+
+type ModifyRouteDataPayload struct {
+	RouteID string    `json:"id"`
+	Data    RouteData `json:"data"`
 }
 
 func GetAllRoutes(search string) []Route {
@@ -44,11 +49,11 @@ func CreateNewRoute(payload CreateRoutePayload) error {
 	}
 
 	r := Route{
-		Name:         payload.Name,
-		ControllerID: payload.ControllerID,
-		Description:  util.Ternary(payload.Description, "No Description Provided", len(payload.Description) > 0).(string),
-		ID:           util.GetHash(payload.Name),
-		Data:         make([]RouteData, 0),
+		Name:        payload.Name,
+		ServiceID:   payload.ServiceID,
+		Description: util.Ternary(payload.Description, "No Description Provided", len(payload.Description) > 0).(string),
+		ID:          util.GetHash(payload.Name),
+		Data:        make([]RouteData, 0),
 	}
 
 	AllRoutes = append(AllRoutes, r)
@@ -63,4 +68,97 @@ func DeleteRouteByID(id string) error {
 		}
 	}
 	return fmt.Errorf("Route with ID '%s' does not exists", id)
+}
+
+func AddRouteData(payload ModifyRouteDataPayload) error {
+
+	routeIndex := -1
+
+	for i, m := range AllRoutes {
+		if m.ID == payload.RouteID {
+			routeIndex = i
+		}
+	}
+
+	if routeIndex == -1 {
+		return fmt.Errorf("Route with ID '%s' does not exist", payload.RouteID)
+	}
+
+	dataIndex := -1
+	for i, r := range AllRoutes[routeIndex].Data {
+		if r.ID == payload.Data.ID {
+			dataIndex = i
+			break
+		}
+	}
+
+	if dataIndex != -1 {
+		return fmt.Errorf("Route Data with ID '%s' already exists", payload.Data.ID)
+	}
+
+	AllRoutes[routeIndex].Data = append(AllRoutes[routeIndex].Data, payload.Data)
+	return nil
+}
+
+func RemoveRouteData(payload ModifyRouteDataPayload) error {
+	routeIndex := -1
+
+	for i, m := range AllRoutes {
+		if m.ID == payload.RouteID {
+			routeIndex = i
+		}
+	}
+
+	if routeIndex == -1 {
+		return fmt.Errorf("Route with ID '%s' does not exist", payload.RouteID)
+	}
+
+	dataIndex := -1
+	for i, r := range AllRoutes[routeIndex].Data {
+		if r.ID == payload.Data.ID {
+			dataIndex = i
+			break
+		}
+	}
+
+	if dataIndex == -1 {
+		return fmt.Errorf("Route Data with ID '%s' does not exist", payload.Data.ID)
+	}
+
+	routes := AllRoutes[routeIndex].Data
+
+	AllRoutes[routeIndex].Data = append(routes[:dataIndex], routes[dataIndex+1:]...)
+	return nil
+}
+
+func UpdateRouteData(payload ModifyRouteDataPayload) error {
+	routeIndex := -1
+
+	for i, m := range AllRoutes {
+		if m.ID == payload.RouteID {
+			routeIndex = i
+		}
+	}
+
+	if routeIndex == -1 {
+		return fmt.Errorf("Route with ID '%s' does not exist", payload.RouteID)
+	}
+
+	dataIndex := -1
+	for i, r := range AllRoutes[routeIndex].Data {
+		if r.ID == payload.Data.ID {
+			dataIndex = i
+			break
+		}
+	}
+
+	if dataIndex == -1 {
+		return fmt.Errorf("Route Data with ID '%s' does not exist", payload.Data.ID)
+	}
+
+	routes := AllRoutes[routeIndex].Data
+
+	AllRoutes[routeIndex].Data = append(routes[:dataIndex], payload.Data)
+	AllRoutes[routeIndex].Data = append(AllRoutes[routeIndex].Data, routes[dataIndex+1:]...)
+	return nil
 }

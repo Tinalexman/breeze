@@ -51,6 +51,14 @@ func (a *App) RemoveControllerMethod(payload controller.ModifyControllerMethodPa
 	return err
 }
 
+func (a *App) RenameControllerMethod(payload controller.ModifyControllerMethodPayload) error {
+	err := controller.RenameControllerMethod(payload)
+	if err == nil {
+		a.SaveTarget(global.CONTROLLER_FILE_NAME)
+	}
+	return err
+}
+
 func (a *App) DeleteControllerByID(id string) error {
 	err := controller.DeleteControllerByID(id)
 	if err == nil {

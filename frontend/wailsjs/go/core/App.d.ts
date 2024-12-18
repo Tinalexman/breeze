@@ -43,6 +43,8 @@ export function LoadProject(arg1:string):Promise<void>;
 
 export function RemoveControllerMethod(arg1:controller.ModifyControllerMethodPayload):Promise<void>;
 
+export function RenameControllerMethod(arg1:controller.ModifyControllerMethodPayload):Promise<void>;
+
 export function Save():Promise<void>;
 
 export function SaveCurrentProject():Promise<void>;

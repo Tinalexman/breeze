@@ -7,6 +7,7 @@ import {
   ProgrammingArrows,
   Smileys,
   Mirror,
+  Trade,
 } from "iconsax-react";
 import { useGlobalData } from "../../stores/global";
 import logo from "../../assets/images/breeze.png";
@@ -52,6 +53,13 @@ const Navigation = () => {
         />
       ),
       color: "#ef4444",
+      text: "#FFFFFF",
+    },
+    {
+      name: "Services",
+      active: <Trade size="20" className="text-white" variant="Bold" />,
+      inactive: <Trade size="20" className="text-slate-700" variant="Broken" />,
+      color: "#334155",
       text: "#FFFFFF",
     },
     {

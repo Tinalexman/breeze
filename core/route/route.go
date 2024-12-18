@@ -9,16 +9,17 @@ const (
 )
 
 type RouteData struct {
+	ID     string `json:"id"`
 	Method string `json:"method"`
 	Path   string `json:"path"`
 }
 
 type Route struct {
-	Name         string      `json:"name"`
-	ID           string      `json:"id"`
-	Description  string      `json:"description"`
-	ControllerID string      `json:"controllerID"`
-	Data         []RouteData `json:"data"`
+	Name        string      `json:"name"`
+	ID          string      `json:"id"`
+	Description string      `json:"description"`
+	ServiceID   string      `json:"serviceID"`
+	Data        []RouteData `json:"data"`
 }
 
 var AllRoutes []Route = make([]Route, 0)

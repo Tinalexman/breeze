@@ -7,6 +7,7 @@ import {
   UpdateController,
   AddControllerMethod,
   RemoveControllerMethod,
+  RenameControllerMethod,
 } from "../../wailsjs/go/core/App";
 import { controller } from "../../wailsjs/go/models";
 import toast from "react-hot-toast";
@@ -171,13 +172,13 @@ export const useUpdateController = (showToast?: boolean) => {
   };
 };
 
-export const useModifyControllerMethod = (showToast?: boolean) => {
+export const useModifyControllerMethod = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
 
   const modifyMethod = async (
     payload: controller.ModifyControllerMethodPayload,
-    mode: "add" | "remove"
+    mode: "add" | "remove" | "rename"
   ) => {
     if (loading) return;
     setLoading(true);
@@ -187,17 +188,14 @@ export const useModifyControllerMethod = (showToast?: boolean) => {
         await AddControllerMethod(payload);
       } else if (mode === "remove") {
         await RemoveControllerMethod(payload);
+      } else if (mode === "rename") {
+        await RenameControllerMethod(payload);
       }
 
       setSuccess(true);
-      if (showToast && showToast) {
-        toast.success("Controller Updated");
-      }
     } catch (error) {
       setSuccess(false);
-      if (showToast && showToast) {
-        toast.error(`${error}`);
-      }
+      toast.error(`${error}`);
     }
 
     setLoading(false);

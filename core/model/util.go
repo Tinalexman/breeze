@@ -12,7 +12,7 @@ type CreateModelPayload struct {
 }
 
 type UpdateModelPayload struct {
-	ID          string      `json:"id"`
+	ModelID     string      `json:"id"`
 	Name        string      `json:"name"`
 	Description string      `json:"description"`
 	MetaData    []ModelData `json:"metadata"`
@@ -61,10 +61,10 @@ func CreateNewModel(payload CreateModelPayload) error {
 
 func UpdateModel(data UpdateModelPayload) error {
 	for i, m := range AllModels {
-		if m.ID == data.ID {
+		if m.ID == data.ModelID {
 			AllModels[i] = Model{
 				Name:        data.Name,
-				ID:          data.ID,
+				ID:          data.ModelID,
 				Description: data.Description,
 				MetaData:    data.MetaData,
 			}
@@ -72,7 +72,7 @@ func UpdateModel(data UpdateModelPayload) error {
 		}
 	}
 
-	return fmt.Errorf("Model with ID '%s' does not exist", data.ID)
+	return fmt.Errorf("Model with ID '%s' does not exist", data.ModelID)
 }
 
 func DeleteModelByID(id string) error {

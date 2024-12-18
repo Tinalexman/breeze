@@ -78,6 +78,10 @@ export function RemoveControllerMethod(arg1) {
   return window['go']['core']['App']['RemoveControllerMethod'](arg1);
 }
 
+export function RenameControllerMethod(arg1) {
+  return window['go']['core']['App']['RenameControllerMethod'](arg1);
+}
+
 export function Save() {
   return window['go']['core']['App']['Save']();
 }

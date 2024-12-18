@@ -46,7 +46,7 @@ const ViewController: FC<{
     loading: loadingModify,
     success: modifySuccess,
     modifyMethod,
-  } = useModifyControllerMethod(true);
+  } = useModifyControllerMethod();
 
   useEffect(() => {
     if (!loadingDelete && deleteSuccess) {
@@ -160,16 +160,13 @@ const ViewController: FC<{
                     )
                   }
                   onChange={(res) => {
-                    // const methods = controller.methods;
-                    // methods[i] = res;
-                    // update(
-                    //   c.Controller.createFrom({
-                    //     id: controller.id,
-                    //     name: controller.name,
-                    //     description: controller.description,
-                    //     methods: methods,
-                    //   })
-                    // );
+                    modifyMethod(
+                      {
+                        id: controller.id,
+                        method: res,
+                      },
+                      "rename"
+                    );
                   }}
                 />
               );

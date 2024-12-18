@@ -3,12 +3,28 @@ package util
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 
 	"github.com/sirupsen/logrus"
 	easy "github.com/t-tomalak/logrus-easy-formatter"
 )
+
+func GetRandomHash() string {
+	return GetHash(generateRandomString())
+}
+
+func generateRandomString() string {
+	return fmt.Sprintf("%s%s%s%s%s",
+		strings.ToUpper(string(rune(rand.Intn(26)+'A'))),
+		strings.ToUpper(string(rune(rand.Intn(26)+'A'))),
+		strings.ToUpper(string(rune(rand.Intn(26)+'A'))),
+		strings.ToUpper(string(rune(rand.Intn(26)+'A'))),
+		strings.ToUpper(string(rune(rand.Intn(26)+'A'))),
+	)
+}
 
 func GetHash(key string) string {
 	hash := sha256.Sum256([]byte(key))

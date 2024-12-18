@@ -9,12 +9,14 @@ import Overview from "../overview/Overview";
 import Navigation from "./Navigation";
 import Routes from "../routes/Routes";
 import { useGlobalData } from "../../stores/global";
+import Services from "../services/Services";
 
 function Dashboard() {
   const children: React.ReactNode[] = [
     <Overview key={"overview"} />,
     <Models key={"models"} />,
     <Controllers key={"controllers"} />,
+    <Services key={"services"} />,
     <Routes key={"routes"} />,
     <Middlewares key={"middlewares"} />,
     <Global key={"global"} />,
